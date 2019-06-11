@@ -95,6 +95,65 @@ function Page() {
 export default Page;
 ```
 
+## 路由
+
+路由最好使用 react-router, 使用 dispatch 为 history 封装一层，这样就可以很好的管理状态和路由。
+
+此库内部也设计了一个迷你的路由管理器，可以无缝将路由也接入状态管理，旨在给出一个路由关联的思路。
+
+我们用刚刚的例子，修改实例化 store 的文件：
+
+```js
+import createStateManager from './utils/createStateManager';
+import createRoute, { urlTools } from '@nuage/react-consumer/createRoute';
+
+// 一个多层级的对象示例，以验证immutable
+const initState: State = {
+  // 此处添加一个状态，用来记录路由信息
+  route: {
+    path: urlTools.defaultPath('/app'),
+    params: urlTools.params(),
+  },
+  user: {
+    info: {
+      num: 0,
+    },
+  },
+};
+
+const { store, Provider, Consumer } = createStateManager(initState);
+
+// 创建一个路由组件，捆绑 Consumer 和 path，params 的状态获取方法
+const Route = createRoute(Consumer, (v: State) => v.route.path, (v: State) => v.route.params);
+
+// 将 Route 导出，在页面中使用
+export { store, Provider, Consumer, Route };
+```
+
+在任何一个页面使用路由, 只有当路径匹配时, 子组件才会渲染:
+
+```js
+import { Route } from './store';
+
+export default () => {
+  return (
+    <Route path="/app">
+      <SomePage />
+    </Route>
+  );
+};
+```
+
+编写用于跳转路由的 dispatch, 即可和其他状态管理一样管理路由了
+
+```js
+export function routePush(url) {
+  store.setState(state => {
+    state.route.path = url;
+  });
+}
+```
+
 ## 单元测试
 
 单元测试我们只需要覆盖 dispatch 的测试即可, dispatch 仅是一个个函数，测试起来非常简单：
