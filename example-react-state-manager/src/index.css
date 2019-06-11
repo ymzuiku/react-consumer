@@ -18,6 +18,10 @@ button {
   outline: none;
 }
 
+button:hover {
+  background-color: #aff;
+}
+
 button:active {
-  background-color: #eee;
+  background-color: #8ff;
 }
