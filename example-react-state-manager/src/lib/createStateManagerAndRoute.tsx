@@ -47,9 +47,9 @@ function createStateManagerAndRoute<S>(initState: S, defaultPath: string) {
 
   function dispatchRouteBack() {
     store.setState((state: any) => {
+      window.history.back();
       state.route.paths.pop();
       state.route.params.pop();
-      window.history.back();
     });
   }
 

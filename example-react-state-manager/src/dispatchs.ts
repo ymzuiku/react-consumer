@@ -6,6 +6,13 @@ export function addNumber() {
   });
 }
 
+export function changeInfiniteIndex(index: number) {
+  store.setState(state => {
+    state.user.infinite[index] = Math.random().toString();
+  });
+  console.log('ss', store.state.user.infinite[index]);
+}
+
 export function routePush(path: string, params?: Object) {
   dispatchRoutePush(path, params);
 }

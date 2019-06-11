@@ -11,7 +11,7 @@ const User: React.FC = () => {
       <section>
         <Consumer>{state => <div>{state.user.info.num}</div>}</Consumer>
         <button onClick={dispatchs.addNumber}>add number</button>
-        <button onClick={() => dispatchs.routeBack()}>Back To App Page</button>
+        <button onClick={() => dispatchs.routeBack()}>Go Back</button>
       </section>
     </div>
   );

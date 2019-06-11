@@ -3,6 +3,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import App from './pages/App';
 import User from './pages/User';
+import InfiniteList from './pages/InfiniteList';
 import * as serviceWorker from './serviceWorker';
 import { Provider, Route } from './store';
 
@@ -14,6 +15,9 @@ const Root: React.FC = () => {
       </Route>
       <Route path="/user">
         <User />
+      </Route>
+      <Route path="/infinite-list">
+        <InfiniteList />
       </Route>
     </Provider>
   );

@@ -1,6 +1,6 @@
 import createStateManagerAndRoute from './lib/createStateManagerAndRoute';
 
-interface State {
+export interface State {
   route: {
     paths: Array<string>;
     params: Array<Object>;
@@ -9,7 +9,13 @@ interface State {
     info: {
       num: number;
     };
+    infinite: Array<string>;
   };
+}
+
+const infinite = [];
+for (let i = 0; i < 10000; i++) {
+  infinite.push('data_' + i);
 }
 
 const initState: State = {
@@ -21,6 +27,7 @@ const initState: State = {
     info: {
       num: 0,
     },
+    infinite,
   },
 };
 
