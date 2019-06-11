@@ -1,9 +1,9 @@
 import './index.css';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import User from './User';
-import * as serviceWorker from './utils/serviceWorker';
+import App from './pages/App';
+import User from './pages/User';
+import * as serviceWorker from './serviceWorker';
 import { Provider, Route } from './store';
 
 const Root: React.FC = () => {
