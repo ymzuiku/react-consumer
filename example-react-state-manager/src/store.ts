@@ -14,7 +14,7 @@ export interface State {
 }
 
 const infinite = [];
-for (let i = 0; i < 10000; i++) {
+for (let i = 0; i < 50000; i++) {
   infinite.push('data_' + i);
 }
 
