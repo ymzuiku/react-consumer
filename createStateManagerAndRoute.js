@@ -28,9 +28,10 @@ function initPaths(def) {
     }
 }
 function createStateManagerAndRoute(initState, defaultPath) {
+    if (defaultPath === void 0) { defaultPath = '/'; }
     var routeState = {
         route: {
-            paths: initPaths('/app'),
+            paths: initPaths(defaultPath),
             params: [queryString.parse(window.location.search)]
         }
     };
@@ -51,9 +52,9 @@ function createStateManagerAndRoute(initState, defaultPath) {
     }
     function dispatchRouteBack() {
         store.setState(function (state) {
+            window.history.back();
             state.route.paths.pop();
             state.route.params.pop();
-            window.history.back();
         });
     }
     return { Provider: Provider, Consumer: Consumer, store: store, Route: Route, dispatchRoutePush: dispatchRoutePush, dispatchRouteBack: dispatchRouteBack };

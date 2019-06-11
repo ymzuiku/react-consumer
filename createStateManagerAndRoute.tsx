@@ -17,10 +17,10 @@ function initPaths(def: string) {
   }
 }
 
-function createStateManagerAndRoute<S>(initState: S, defaultPath: string) {
+function createStateManagerAndRoute<S>(initState: S, defaultPath: string = '/') {
   const routeState = {
     route: {
-      paths: initPaths('/app'),
+      paths: initPaths(defaultPath),
       params: [queryString.parse(window.location.search)],
     },
   };
@@ -47,9 +47,9 @@ function createStateManagerAndRoute<S>(initState: S, defaultPath: string) {
 
   function dispatchRouteBack() {
     store.setState((state: any) => {
+      window.history.back();
       state.route.paths.pop();
       state.route.params.pop();
-      window.history.back();
     });
   }
 
