@@ -3,11 +3,18 @@ import createRoute from './createRoute';
 import * as queryString from 'query-string';
 
 function initPaths(def: string) {
-  if (window.location.pathname === '/') {
+  const path = window.location.pathname;
+
+  if (path === '/') {
     window.history.replaceState(null, def, def);
     return [def];
+  } else {
+    const search = window.location.search;
+
+    window.history.replaceState(null, def, def);
+    window.history.pushState(null, path, path + search);
+    return [def, path];
   }
-  return [def, window.location.pathname];
 }
 
 function createStateManagerAndRoute<S>(initState: S, defaultPath: string) {

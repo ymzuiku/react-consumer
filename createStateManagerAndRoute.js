@@ -15,11 +15,17 @@ var createStateManager_1 = require("./createStateManager");
 var createRoute_1 = require("./createRoute");
 var queryString = require("query-string");
 function initPaths(def) {
-    if (window.location.pathname === '/') {
+    var path = window.location.pathname;
+    if (path === '/') {
         window.history.replaceState(null, def, def);
         return [def];
     }
-    return [def, window.location.pathname];
+    else {
+        var search = window.location.search;
+        window.history.replaceState(null, def, def);
+        window.history.pushState(null, path, path + search);
+        return [def, path];
+    }
 }
 function createStateManagerAndRoute(initState, defaultPath) {
     var routeState = {
