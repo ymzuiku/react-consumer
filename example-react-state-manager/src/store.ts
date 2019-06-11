@@ -1,4 +1,4 @@
-import createReactConsumer from './lib';
+import createReactConsumer from './lib/createStateManager';
 import createRoute, { urlTools } from './lib/createRoute';
 
 interface State {
