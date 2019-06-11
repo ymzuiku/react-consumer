@@ -2,12 +2,12 @@
 import * as React from 'react';
 import immer from 'immer';
 
-interface Store<S> extends React.Context<S> {
+export interface Store<S> extends React.Context<S> {
   setState(fn: (state: S) => void): void;
   state: S;
 }
 
-interface ConsumerProps<S> {
+export interface ConsumerProps<S> {
   children: (state: S) => any;
   memo?: (state: S) => Array<any>;
 }

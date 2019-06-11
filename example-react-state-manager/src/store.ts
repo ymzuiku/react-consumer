@@ -1,10 +1,9 @@
-import createReactConsumer from '@nuage/react-consumer';
-import createRoute, { urlTools } from '@nuage/react-consumer/createRoute';
+import createStateManagerAndRoute from './lib/createStateManagerAndRoute';
 
 interface State {
   route: {
-    path: string;
-    params: string;
+    paths: Array<string>;
+    params: Array<Object>;
   };
   user: {
     info: {
@@ -15,8 +14,8 @@ interface State {
 
 const initState: State = {
   route: {
-    path: urlTools.defaultPath('/app'),
-    params: urlTools.params(),
+    paths: [],
+    params: [],
   },
   user: {
     info: {
@@ -25,8 +24,9 @@ const initState: State = {
   },
 };
 
-const { Provider, Consumer, store } = createReactConsumer<State>(initState);
+const { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack } = createStateManagerAndRoute<State>(initState, '/app');
 
-const Route = createRoute(Consumer, (v: State) => v.route.path, (v: State) => v.route.params);
+export { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack };
 
-export { Provider, Consumer, store, Route };
+const w = window as any;
+w.store = store;

@@ -1,4 +1,4 @@
-import { store } from './store';
+import { store, dispatchRouteBack, dispatchRoutePush } from './store';
 
 export function addNumber() {
   store.setState(state => {
@@ -6,8 +6,10 @@ export function addNumber() {
   });
 }
 
-export function routePush(url: string) {
-  store.setState(state => {
-    state.route.path = url;
-  });
+export function routePush(path: string, params?: Object) {
+  dispatchRoutePush(path, params);
+}
+
+export function routeBack() {
+  dispatchRouteBack();
 }

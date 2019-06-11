@@ -2,6 +2,7 @@ import './index.css';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import User from './User';
 import * as serviceWorker from './utils/serviceWorker';
 import { Provider, Route } from './store';
 
@@ -10,6 +11,9 @@ const Root: React.FC = () => {
     <Provider>
       <Route path="/app">
         <App />
+      </Route>
+      <Route path="/user">
+        <User />
       </Route>
     </Provider>
   );
