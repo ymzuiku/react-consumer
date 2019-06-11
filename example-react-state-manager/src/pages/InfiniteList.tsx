@@ -25,7 +25,7 @@ const InfiniteList: React.FC = () => {
         <h3>Infinite Page</h3>
       </header>
       <section>
-        <List height={700} itemCount={store.state.user.infinite.length} itemSize={100} width={300}>
+        <List height={450} itemCount={store.state.user.infinite.length} itemSize={100} width={375}>
           {({ index, style }) => (
             <Consumer memo={state => [state.user.infinite[index]]}>{state => <Row index={index} style={style} state={state} />}</Consumer>
           )}
