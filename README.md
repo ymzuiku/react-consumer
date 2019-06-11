@@ -1,4 +1,4 @@
-# React 状态管理之`温故知新`
+# 此库是内部分享状态管理的一个产物
 
 旨在阐述清楚 声明式 的状态管理思路，以 React 作为例子，思路适用于所有 声明式 UI 的状态管理方案
 
@@ -11,6 +11,8 @@
 ```sh
 yarn add @nuage/react-consumer
 ```
+
+源码可以直接看此仓库的 `createStateManager` 文件，代码仅有几十行。
 
 ### 2. 实例化 store, Provider, Consumer
 
