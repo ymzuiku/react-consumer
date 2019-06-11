@@ -18,7 +18,7 @@ export const urlTools = {
 
 interface RouteProps {
   path: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 interface IGet {

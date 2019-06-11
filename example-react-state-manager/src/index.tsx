@@ -3,12 +3,14 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './utils/serviceWorker';
-import { Provider } from './store';
+import { Provider, Route } from './store';
 
 const Root: React.FC = () => {
   return (
     <Provider>
-      <App />
+      <Route path="/app">
+        <App />
+      </Route>
     </Provider>
   );
 };

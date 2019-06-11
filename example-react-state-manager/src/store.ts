@@ -1,5 +1,5 @@
-import createReactConsumer from './lib/createStateManager';
-import createRoute, { urlTools } from './lib/createRoute';
+import createReactConsumer from '@nuage/react-consumer';
+import createRoute, { urlTools } from '@nuage/react-consumer/createRoute';
 
 interface State {
   route: {
@@ -15,7 +15,7 @@ interface State {
 
 const initState: State = {
   route: {
-    path: urlTools.defaultPath('/home'),
+    path: urlTools.defaultPath('/app'),
     params: urlTools.params(),
   },
   user: {
