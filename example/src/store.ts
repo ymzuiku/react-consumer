@@ -1,12 +1,8 @@
 // import { createStateManagerAndRoute } from '@nuage/react-consumer/createStateManagerAndRoute';
-import { createStateManagerAndRoute } from './lib/createStateManagerAndRoute';
+import { createStateManagerAndRoute, IRouteState } from './lib/createStateManagerAndRoute';
 
 // tslint:disable:completed-docs
-export interface IState {
-  route: {
-    params: object[];
-    paths: string[];
-  };
+export interface IState extends IRouteState {
   user: {
     infinite: string[];
     info: {
@@ -21,10 +17,6 @@ for (let i = 0; i < 50000; i++) {
 }
 
 const initState: IState = {
-  route: {
-    params: [],
-    paths: [],
-  },
   user: {
     infinite,
     info: {

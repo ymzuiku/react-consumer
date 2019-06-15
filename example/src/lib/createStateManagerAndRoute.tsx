@@ -26,11 +26,18 @@ function initPaths(def: string) {
   return [def, path];
 }
 
+export interface IRouteState {
+  route?: {
+    params: object[];
+    paths: string[];
+  };
+}
+
 /**
  * 创建状态管理及路由控制
  */
 export function createStateManagerAndRoute<S>(initState: S, defaultPath: string = '/') {
-  const routeState = {
+  const routeState: IRouteState = {
     route: {
       params: [queryString.parse(window.location.search)],
       paths: initPaths(defaultPath),

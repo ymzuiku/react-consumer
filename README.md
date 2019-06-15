@@ -17,7 +17,7 @@ yarn add @nuage/react-consumer
 ### 2. 实例化 store, Provider, Consumer
 
 ```js
-import createStateManager from './utils/createStateManager';
+import { createStateManager } from '@nuage/react-consumer/createStateManager';
 
 // 一个多层级的对象示例，以验证immutable
 const initState = {
@@ -99,29 +99,18 @@ export default Page;
 
 路由最好使用 react-router, 使用 dispatch 为 history 封装一层，这样就可以很好的管理状态和路由。
 
-`createStateManagerAndRoute` 对象内部实现了一个迷你的路由，可以无缝将路由也接入状态管理，旨在给出一个路由关联的思路, 具体可以查看 `createStateManagerAndRoute.tsx` 文件。
+`createStateManagerAndRoute` 对象内部实现了一个迷你的路由，可以无缝将路由也接入状态管理，旨在给出一个路由关联的思路, 具体可以查看 `example/lib/createStateManagerAndRoute.tsx` 文件。
 
 我们用刚刚的例子，修改实例化 store 的文件：
 
 ```tsx
-import createStateManagerAndRoute from '@nuage/react-consumer/createStateManagerAndRoute';
+import { createStateManagerAndRoute, IRouteState } from '@nuage/react-consumer/createStateManagerAndRoute';
 
-interface State {
-  // [注意] 需要添加route对象，我们约定使用 route 对象，用来记录路由状态
-  route: {
-    paths: Array<string>;
-    params: Array<Object>;
-  };
-}
+// [注意] 需要添加route对象，我们约定使用 route 对象，用来记录路由状态
+interface State extends IRouteState {}
 
 // 一个多层级的对象示例，以验证immutable
-const initState: State = {
-  // [注意] 初始化route对象
-  route: {
-    path: [],
-    params: [],
-  },
-};
+const initState: State = {};
 
 const { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack } = createStateManagerAndRoute<State>(
   initState,
