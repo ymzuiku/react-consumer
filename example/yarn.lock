@@ -1095,12 +1095,13 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@nuage/react-consumer@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@nuage/react-consumer/-/react-consumer-0.0.4.tgz#dac6c9aa159d7eca990d793b3274864f02509afc"
-  integrity sha512-Bvdo7jVd87WOaVaJGrVyPL+DGoSKhA9GgINK7pzXXvtY94qiV4mG+iksE4AbQ0LrYsm1e0pMs9fZYP0/pdvP7w==
+"@nuage/react-consumer@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@nuage/react-consumer/-/react-consumer-0.1.2.tgz#aea727fdd9aaf8f437a8e025d5a0bb1f6ce3f2b4"
+  integrity sha512-6ETKqWd2ras4ewU0KZIBB3DMcBnZe4cAnSAi77RoG3kDqZR1rPGFpGt2IdS0VUdRwtETShf3yDLI1WkZ+9iB7Q==
   dependencies:
     immer "^3.1.3"
+    query-string "^6.7.0"
 
 "@svgr/babel-plugin-add-jsx-attribute@^4.2.0":
   version "4.2.0"

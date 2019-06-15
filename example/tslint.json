@@ -5,6 +5,8 @@
     "react-hooks/exhaustive-deps": false
   },
   "rules": {
+    "comment-format": false,
+    "no-submodule-imports": false,
     "completed-docs": false,
     "no-parameter-reassignment": false,
     "no-unsafe-any": false,

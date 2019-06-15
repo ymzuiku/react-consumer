@@ -13,7 +13,6 @@ export const User: React.FC = () => {
         <Consumer>{state => <div>{state.user.info.num}</div>}</Consumer>
         <button onClick={dispatchs.addNumber}>add number</button>
         <button onClick={() => dispatchs.routeBack()}>Go Back</button>
-        <button onClick={() => dispatchs.routePush('/infinite-list')}>Go To InfiniteList Page</button>
       </section>
     </div>
   );
