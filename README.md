@@ -6,7 +6,7 @@
 
 ## 状态管理的配置
 
-### 1. 按照依赖
+### 1. 安装依赖
 
 ```sh
 yarn add @nuage/react-consumer
@@ -123,7 +123,10 @@ const initState: State = {
   },
 };
 
-const { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack } = createStateManagerAndRoute<State>(initState, '/app');
+const { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack } = createStateManagerAndRoute<State>(
+  initState,
+  '/app',
+);
 
 // 创建一个路由组件，捆绑 Consumer 和 path，params 的状态获取方法
 const Route = createRoute(Consumer, (v: State) => v.route.path, (v: State) => v.route.params);
