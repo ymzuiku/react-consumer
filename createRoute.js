@@ -1,7 +1,9 @@
 "use strict";
 exports.__esModule = true;
 var React = require("react");
-// 使用状态管理简单模拟一个 react-router, 并且将router也接入状态管理中
+/**
+ * 使用状态管理简单模拟一个 react-router, 并且将router也接入状态管理中
+ */
 function createRoute(Consumer, checker) {
     return function Route(_a) {
         var path = _a.path, children = _a.children;
@@ -13,4 +15,4 @@ function createRoute(Consumer, checker) {
         }));
     };
 }
-exports["default"] = createRoute;
+exports.createRoute = createRoute;

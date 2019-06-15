@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { FixedSizeList as List } from 'react-window';
-import { Consumer, store, State } from '../store';
-import * as dispatchs from '../dispatchs';
 
-interface IRow {
+import * as dispatchs from '../dispatchs';
+import { Consumer, IState, store } from '../store';
+
+export interface IRow {
   index: number;
-  style: Object;
-  state: State;
+  state: IState;
+  style: React.CSSProperties;
 }
 
 const Row = ({ state, index, style }: IRow) => {
@@ -18,7 +19,7 @@ const Row = ({ state, index, style }: IRow) => {
   );
 };
 
-const InfiniteList: React.FC = () => {
+export const InfiniteList: React.FC = () => {
   return (
     <div>
       <header>
@@ -27,7 +28,9 @@ const InfiniteList: React.FC = () => {
       <section>
         <List height={450} itemCount={store.state.user.infinite.length} itemSize={100} width={375}>
           {({ index, style }) => (
-            <Consumer memo={state => [state.user.infinite[index]]}>{state => <Row index={index} style={style} state={state} />}</Consumer>
+            <Consumer memo={state => [state.user.infinite[index]]}>
+              {state => <Row index={index} style={style} state={state} />}
+            </Consumer>
           )}
         </List>
         <button onClick={() => dispatchs.routeBack()}>Go Back</button>
@@ -35,5 +38,3 @@ const InfiniteList: React.FC = () => {
     </div>
   );
 };
-
-export default InfiniteList;

@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Consumer } from '../store';
-import * as dispatchs from '../dispatchs';
 
-const App: React.FC = () => {
+import * as dispatchs from '../dispatchs';
+import { Consumer } from '../store';
+
+export const App: React.FC = () => {
   return (
     <div>
       <header>
@@ -17,5 +18,3 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-export default App;

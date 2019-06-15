@@ -11,52 +11,63 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-var createStateManager_1 = require("./createStateManager");
-var createRoute_1 = require("./createRoute");
 var queryString = require("query-string");
+var createRoute_1 = require("./createRoute");
+var createStateManager_1 = require("./createStateManager");
+/**
+ * 根据浏览器访问的URL初始化路径
+ */
 function initPaths(def) {
+    if (typeof window === 'undefined') {
+        return ['/'];
+    }
     var path = window.location.pathname;
     if (path === '/') {
         window.history.replaceState(null, def, def);
         return [def];
     }
-    else {
-        var search = window.location.search;
-        window.history.replaceState(null, def, def);
-        window.history.pushState(null, path, path + search);
-        return [def, path];
-    }
+    var search = window.location.search;
+    window.history.replaceState(null, def, def);
+    window.history.pushState(null, path, path + search);
+    return [def, path];
 }
+/**
+ * 创建状态管理及路由控制
+ */
 function createStateManagerAndRoute(initState, defaultPath) {
     if (defaultPath === void 0) { defaultPath = '/'; }
     var routeState = {
         route: {
-            paths: initPaths(defaultPath),
-            params: [queryString.parse(window.location.search)]
+            params: [queryString.parse(window.location.search)],
+            paths: initPaths(defaultPath)
         }
     };
     initState = __assign({}, initState, routeState);
-    var _a = createStateManager_1["default"](initState), Provider = _a.Provider, Consumer = _a.Consumer, store = _a.store;
-    var Route = createRoute_1["default"](Consumer, function (state, path) { return state.route.paths[state.route.paths.length - 1] === path; });
-    function dispatchRoutePush(path, params) {
+    var _a = createStateManager_1.createStateManager(initState), Provider = _a.Provider, Consumer = _a.Consumer, store = _a.store;
+    var Route = createRoute_1.createRoute(Consumer, function (state, path) { return state.route.paths[state.route.paths.length - 1] === path; });
+    var dispatchRoutePush = function (path, params) {
         store.setState(function (state) {
             state.route.paths.push(path);
             if (params) {
                 state.route.params.push(params);
-                window.history.pushState(null, path, path + '?' + queryString.stringify(params));
+                if (typeof window !== 'undefined') {
+                    window.history.pushState(null, path, path + "?" + queryString.stringify(params));
+                }
             }
             else {
-                window.history.pushState(null, path, path);
+                if (typeof window !== 'undefined') {
+                    window.history.pushState(null, path, path);
+                }
             }
         });
-    }
-    function dispatchRouteBack() {
+    };
+    var dispatchRouteBack = function () {
         store.setState(function (state) {
             window.history.back();
             state.route.paths.pop();
             state.route.params.pop();
         });
-    }
+    };
     return { Provider: Provider, Consumer: Consumer, store: store, Route: Route, dispatchRoutePush: dispatchRoutePush, dispatchRouteBack: dispatchRouteBack };
 }
-exports["default"] = createStateManagerAndRoute;
+exports.createStateManagerAndRoute = createStateManagerAndRoute;

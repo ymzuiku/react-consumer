@@ -1,0 +1,30 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:all", "tslint-react", "tslint-config-prettier"],
+  "jsRules": {
+    "react-hooks/exhaustive-deps": false
+  },
+  "rules": {
+    "completed-docs": false,
+    "no-parameter-reassignment": false,
+    "no-unsafe-any": false,
+    "no-magic-numbers": false,
+    "increment-decrement": false,
+    "strict-type-predicates": false,
+    "no-null-keyword": false,
+    "no-null-undefined-union": false,
+    "strict-boolean-expressions": false,
+    "only-arrow-functions": false,
+    "no-any": false,
+    "react-hooks/exhaustive-deps": false,
+    "jsx-no-lambda": false,
+    "no-void-expression": false,
+    "typedef": false,
+    "no-implicit-dependencies": false,
+    "arrow-return-shorthand": false,
+    "variable-name": false,
+    "file-name-casing": [false, "camel-case"],
+    "no-import-side-effect": [true, { "ignore-module": "(\\.html|\\.css|\\.scss|\\.less)$" }]
+  },
+  "rulesDirectory": []
+}
