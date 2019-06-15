@@ -44,7 +44,7 @@ function createStateManagerAndRoute(initState, defaultPath) {
     };
     initState = __assign({}, initState, routeState);
     var _a = createStateManager_1.createStateManager(initState), Provider = _a.Provider, Consumer = _a.Consumer, store = _a.store;
-    var Route = createRoute_1.createRoute(Consumer, function (state, path) { return state.route.paths[state.route.paths.length - 1] === path; });
+    var Route = createRoute_1.createRoute(Consumer);
     var dispatchRoutePush = function (path, params) {
         store.setState(function (state) {
             state.route.paths.push(path);

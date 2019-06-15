@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FixedSizeList as List } from 'react-window';
 
 import * as dispatchs from '../dispatchs';
-import { Consumer, IState, store } from '../store';
+import { Consumer, IState, Route, store } from '../store';
 
 export interface IRow {
   index: number;
@@ -24,6 +24,9 @@ export const InfiniteList: React.FC = () => {
     <div>
       <header>
         <h3>Infinite Page</h3>
+        <Route path="/infinite-list/aaa">
+          <h5>Other aaa</h5>
+        </Route>
       </header>
       <section>
         <List height={450} itemCount={store.state.user.infinite.length} itemSize={100} width={375}>

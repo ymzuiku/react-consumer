@@ -1,11 +1,11 @@
 {
   "name": "@nuage/react-consumer",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "createStateManager.js",
   "types": "createStateManager.d.ts",
   "license": "MIT",
   "scripts": {
-    "lib": "tsc example/src/lib/*.tsx --jsx react --outDir ./ -d true -t ES3 --diagnostics true"
+    "lib": "tsc example/src/lib/*.tsx --jsx react --outDir ./ -d true -t ES3"
   },
   "dependencies": {
     "immer": "^3.1.3",

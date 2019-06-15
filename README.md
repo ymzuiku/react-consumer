@@ -99,7 +99,7 @@ export default Page;
 
 路由最好使用 react-router, 使用 dispatch 为 history 封装一层，这样就可以很好的管理状态和路由。
 
-此库内部也设计了一个迷你的路由管理器，可以无缝将路由也接入状态管理，旨在给出一个路由关联的思路, 具体可以查看 `createStateManagerAndRoute.tsx` 文件。
+`createStateManagerAndRoute` 对象内部实现了一个迷你的路由，可以无缝将路由也接入状态管理，旨在给出一个路由关联的思路, 具体可以查看 `createStateManagerAndRoute.tsx` 文件。
 
 我们用刚刚的例子，修改实例化 store 的文件：
 
@@ -135,15 +135,18 @@ const Route = createRoute(Consumer, (v: State) => v.route.path, (v: State) => v.
 export { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack };
 ```
 
-在任何一个页面使用路由, 只有当路径匹配时, 子组件才会渲染:
+在任何一个页面使用路由, 只有当路径匹配时, 子组件才会渲染, 路由可以嵌套使用:
 
 ```js
 import { Route } from './store';
 
 export default () => {
   return (
-    <Route path="/app">
-      <SomePage />
+    <Route path="/user">
+      <UserPage />
+      <Route path="/user/login">
+        <Login />
+      </Route>
     </Route>
   );
 };

@@ -43,10 +43,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
   };
 
   const { Provider, Consumer, store } = createStateManager<S>(initState);
-  const Route = createRoute<S>(
-    Consumer,
-    (state: any, path: string) => state.route.paths[state.route.paths.length - 1] === path,
-  );
+  const Route = createRoute<S>(Consumer);
 
   const dispatchRoutePush = (path: string, params?: { [key: string]: any }) => {
     store.setState((state: any) => {
