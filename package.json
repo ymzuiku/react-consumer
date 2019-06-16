@@ -1,6 +1,6 @@
 {
-  "name": "@nuage/react-consumer",
-  "version": "0.1.4",
+  "name": "react-consumer",
+  "version": "0.1.5",
   "main": "createStateManager.js",
   "types": "createStateManager.d.ts",
   "license": "MIT",

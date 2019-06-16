@@ -9,7 +9,7 @@
 ### 1. 安装依赖
 
 ```sh
-yarn add @nuage/react-consumer
+yarn add react-consumer
 ```
 
 源码可以直接看此仓库的 `createStateManager.tsx` 文件，代码仅有几十行。
@@ -17,7 +17,7 @@ yarn add @nuage/react-consumer
 ### 2. 实例化 store, Provider, Consumer
 
 ```js
-import { createStateManager } from '@nuage/react-consumer/createStateManager';
+import { createStateManager } from 'react-consumer/createStateManager';
 
 // 一个多层级的对象示例，以验证immutable
 const initState = {
@@ -104,7 +104,7 @@ export default Page;
 我们用刚刚的例子，修改实例化 store 的文件：
 
 ```tsx
-import { createStateManagerAndRoute, IRouteState } from '@nuage/react-consumer/createStateManagerAndRoute';
+import { createStateManagerAndRoute, IRouteState } from 'react-consumer/createStateManagerAndRoute';
 
 // [注意] 需要添加route对象，我们约定使用 route 对象，用来记录路由状态
 interface State extends IRouteState {}
