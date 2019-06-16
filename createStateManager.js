@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var immer_1 = require("immer");
 var React = require("react");
 /**
@@ -21,7 +21,7 @@ function createStateManager(initalState) {
     var store = React.createContext(initalState);
     store.state = initalState;
     store.setState = function (fn) {
-        store.state = immer_1["default"](store.state, fn);
+        store.state = immer_1.default(store.state, fn);
     };
     store.getState = function (fn) {
         if (fn) {
@@ -38,7 +38,7 @@ function createStateManager(initalState) {
     var Provider = function (props) {
         var _a = React.useState(store.state), state = _a[0], setState = _a[1];
         // 使用 immer 进行更新状态, 确保未更新的对象还是旧的引用
-        store.setState = function (fn) { return setState(immer_1["default"](state, fn)); };
+        store.setState = function (fn) { return setState(immer_1.default(state, fn)); };
         store.state = state;
         return React.createElement(store.Provider, __assign({ value: state }, props));
     };

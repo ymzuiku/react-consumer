@@ -12,6 +12,7 @@
     "no-unsafe-any": false,
     "no-magic-numbers": false,
     "increment-decrement": false,
+    "no-unnecessary-callback-wrapper": false,
     "strict-type-predicates": false,
     "no-null-keyword": false,
     "no-null-undefined-union": false,

@@ -16,7 +16,11 @@ for (let i = 0; i < 50000; i++) {
   infinite.push(`data_${i}`);
 }
 
-const initState: IState = {
+const initState = {
+  route: {
+    params: [],
+    paths: [],
+  },
   user: {
     infinite,
     info: {
@@ -25,12 +29,9 @@ const initState: IState = {
   },
 };
 
-const { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack } = createStateManagerAndRoute<IState>(
-  initState,
-  '/app',
-);
+const { Provider, Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute<IState>(initState, '/app');
 
-export { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack };
+export { Provider, Consumer, store, Route, dispatchRoute };
 
 const w = window as any;
 w.store = store;

@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var queryString = require("query-string");
 var createRoute_1 = require("./createRoute");
 var createStateManager_1 = require("./createStateManager");
@@ -22,7 +22,7 @@ function initPaths(def) {
         return ['/'];
     }
     var path = window.location.pathname;
-    if (path === '/') {
+    if (path === '/' || path === def) {
         window.history.replaceState(null, def, def);
         return [def];
     }
@@ -39,19 +39,61 @@ function createStateManagerAndRoute(initState, defaultPath) {
     var routeState = {
         route: {
             params: [queryString.parse(window.location.search)],
-            paths: initPaths(defaultPath)
-        }
+            paths: initPaths(defaultPath),
+        },
     };
     initState = __assign({}, initState, routeState);
     var _a = createStateManager_1.createStateManager(initState), Provider = _a.Provider, Consumer = _a.Consumer, store = _a.store;
     var Route = createRoute_1.createRoute(Consumer);
-    var dispatchRoutePush = function (path, params) {
+    var routeListenFns = [];
+    /**
+     * 为route的变化添加监听，如果监听函数返回不是 true，则拦截此次的路由变化
+     */
+    var routeListen = function (fn) {
+        routeListenFns.push(fn);
+    };
+    var routeListenFnsChecker = function (param) {
+        var isBlock = true;
+        var realState = store.state;
+        var path = realState.route.paths[realState.route.paths.length - 1];
+        for (var _i = 0, routeListenFns_1 = routeListenFns; _i < routeListenFns_1.length; _i++) {
+            var fn = routeListenFns_1[_i];
+            isBlock = fn(path, param, store.state);
+            if (isBlock) {
+                break;
+            }
+        }
+        return isBlock;
+    };
+    /**
+     * 替换当前路由状态
+     */
+    var dispatchRouteReplace = function (param) {
+        if (!routeListenFnsChecker(param)) {
+            return;
+        }
+        var realState = store.state;
+        var path = realState.route.paths[realState.route.paths.length - 1];
+        store.setState(function (state) {
+            state.route.params[state.route.params.length - 1] = param;
+            if (typeof window !== 'undefined') {
+                window.history.replaceState(null, path, path + "?" + queryString.stringify(param));
+            }
+        });
+    };
+    /**
+     * 推进一个新的路由，并且更新 AppState
+     */
+    var dispatchRoutePush = function (path, param) {
+        if (!routeListenFnsChecker(param)) {
+            return;
+        }
         store.setState(function (state) {
             state.route.paths.push(path);
-            if (params) {
-                state.route.params.push(params);
+            if (param) {
+                state.route.params.push(param);
                 if (typeof window !== 'undefined') {
-                    window.history.pushState(null, path, path + "?" + queryString.stringify(params));
+                    window.history.pushState(null, path, path + "?" + queryString.stringify(param));
                 }
             }
             else {
@@ -61,13 +103,34 @@ function createStateManagerAndRoute(initState, defaultPath) {
             }
         });
     };
-    var dispatchRouteBack = function () {
+    /**
+     * 移走一个路由或者去到指定路径的路由，并且更新视图
+     */
+    var dispatchRouteBack = function (index) {
+        var realState = store.state;
+        var _index = index;
+        if (typeof index !== 'number' || index === undefined) {
+            _index = realState.route.params.length - 1;
+        }
+        _index = _index < 0 ? 0 : _index;
+        var param = realState.route.params[_index];
+        if (!routeListenFnsChecker(param)) {
+            return;
+        }
         store.setState(function (state) {
-            window.history.back();
-            state.route.paths.pop();
-            state.route.params.pop();
+            for (var i = 0; i < state.route.paths.length - _index; i++) {
+                window.history.back();
+                state.route.paths.pop();
+                state.route.params.pop();
+            }
         });
     };
-    return { Provider: Provider, Consumer: Consumer, store: store, Route: Route, dispatchRoutePush: dispatchRoutePush, dispatchRouteBack: dispatchRouteBack };
+    var dispatchRoute = {
+        back: dispatchRouteBack,
+        listen: routeListen,
+        push: dispatchRoutePush,
+        replace: dispatchRouteReplace,
+    };
+    return { Provider: Provider, Consumer: Consumer, store: store, Route: Route, dispatchRoute: dispatchRoute };
 }
 exports.createStateManagerAndRoute = createStateManagerAndRoute;

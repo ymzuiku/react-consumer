@@ -115,16 +115,13 @@ const initState = {
   },
 };
 
-const { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack } = createStateManagerAndRoute(
-  initState,
-  '/app',
-);
+const { Provider, Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute(initState, '/app');
 
 // 创建一个路由组件，捆绑 Consumer 和 path，params 的状态获取方法
 const Route = createRoute(Consumer, (v: State) => v.route.path, (v: State) => v.route.params);
 
 // 将 Route 导出，在页面中使用
-export { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack };
+export { Provider, Consumer, store, Route, dispatchRoute };
 ```
 
 在任何一个页面使用路由, 只有当路径匹配时, 子组件才会渲染, 路由可以嵌套使用:
@@ -144,16 +141,31 @@ export default () => {
 };
 ```
 
-切换路由, 也仅仅是两个预设好的 dispatch:
+切换路由, 也仅仅是几个预设好的 dispatch:
 
 ```js
-import { dispatchRoutePush, dispatchRouteBack } from './store';
+import { dispatchRoute } from './store';
 
 // 推入一个路由
-dispatchRoutePush('/some-page', { name: 'dog' });
+dispatchRoute.push('/some-page', { name: 'dog' });
 
 // 返回上一次的路由
-dispatchRouteBack();
+dispatchRoute.back();
+
+// 返回首屏的路由
+dispatchRoute.back(0);
+
+// 修改当前路由的编写
+dispatchRoute.replace({ name: 100 });
+
+// 监听路由的变化
+dispatchRoute.listen((path, params, state) => {
+  // 如果返回的是false, 拦截此次路由的派发，不更新路由也不更新 AppState
+  if (params.name > 50) {
+    return false;
+  }
+  return true;
+});
 ```
 
 ## 单元测试

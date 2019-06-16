@@ -1,7 +1,7 @@
 import { IRouteProps } from './createRoute';
 import { IConsumerProps, IStore } from './createStateManager';
 export interface IRouteState {
-    route?: {
+    route: {
         params: object[];
         paths: string[];
     };
@@ -14,8 +14,14 @@ export declare function createStateManagerAndRoute<S>(initState: S, defaultPath?
     Consumer: import("react").FunctionComponent<IConsumerProps<S>>;
     store: IStore<S>;
     Route: ({ path, children }: IRouteProps) => JSX.Element;
-    dispatchRoutePush: (path: string, params?: {
-        [key: string]: any;
-    }) => void;
-    dispatchRouteBack: () => void;
+    dispatchRoute: {
+        back: (index?: number) => void;
+        listen: (fn: (path: string, param: object, state: S) => boolean) => void;
+        push: (path: string, param?: {
+            [key: string]: any;
+        }) => void;
+        replace: (param: {
+            [key: string]: any;
+        }) => void;
+    };
 };

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FixedSizeList as List } from 'react-window';
 
 import * as dispatchs from '../dispatchs';
-import { Consumer, IState, Route, store } from '../store';
+import { Consumer, dispatchRoute, IState, Route, store } from '../store';
 
 export interface IRow {
   index: number;
@@ -24,6 +24,10 @@ export const InfiniteList: React.FC = () => {
     <div>
       <header>
         <h3>Infinite Page</h3>
+        <Consumer>{state => <h3>Route: {JSON.stringify(state.route.paths)} </h3>}</Consumer>
+        <button onClick={() => dispatchRoute.replace({ dog: Math.random() })}>Replace params</button>
+        <button onClick={() => dispatchRoute.back()}>Go Back</button>
+        <button onClick={() => dispatchRoute.back(0)}>Go Root Page</button>
         <Route path="/infinite-list/aaa">
           <h5>Other aaa</h5>
         </Route>
@@ -36,7 +40,6 @@ export const InfiniteList: React.FC = () => {
             </Consumer>
           )}
         </List>
-        <button onClick={() => dispatchs.routeBack()}>Go Back</button>
       </section>
     </div>
   );
