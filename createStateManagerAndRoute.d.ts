@@ -1,5 +1,11 @@
 import { IRouteProps } from './createRoute';
 import { IConsumerProps, IStore } from './createStateManager';
+export interface IRouteState {
+    route?: {
+        params: object[];
+        paths: string[];
+    };
+}
 /**
  * 创建状态管理及路由控制
  */

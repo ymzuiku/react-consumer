@@ -3,6 +3,8 @@ import * as queryString from 'query-string';
 import { createRoute, IRouteProps } from './createRoute';
 import { createStateManager, IConsumerProps, IStore } from './createStateManager';
 
+
+
 /**
  * 根据浏览器访问的URL初始化路径
  */
