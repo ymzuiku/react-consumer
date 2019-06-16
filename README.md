@@ -95,7 +95,7 @@ function Page() {
 export default Page;
 ```
 
-## 路由
+## 捆绑路由
 
 路由最好使用 react-router, 使用 dispatch 为 history 封装一层，这样就可以很好的管理状态和路由。
 
@@ -104,15 +104,18 @@ export default Page;
 我们用刚刚的例子，修改实例化 store 的文件：
 
 ```tsx
-import { createStateManagerAndRoute, IRouteState } from 'react-consumer/createStateManagerAndRoute';
+import { createStateManagerAndRoute } from 'react-consumer/createStateManagerAndRoute';
 
-// [注意] 需要添加route对象，我们约定使用 route 对象，用来记录路由状态
-interface State extends IRouteState {}
+const initState = {
+  otherData: 'temp',
+  // [注意] 需要添加 route:{params:[], paths:[]} 对象，我们约定使用 route 对象，用来记录路由状态
+  route: {
+    params: [],
+    paths: [],
+  },
+};
 
-// 一个多层级的对象示例，以验证immutable
-const initState: State = {};
-
-const { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack } = createStateManagerAndRoute<State>(
+const { Provider, Consumer, store, Route, dispatchRoutePush, dispatchRouteBack } = createStateManagerAndRoute(
   initState,
   '/app',
 );
