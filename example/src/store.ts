@@ -1,4 +1,3 @@
-// import { createStateManagerAndRoute } from '@nuage/react-consumer/createStateManagerAndRoute';
 import { createStateManagerAndRoute, IRouteState } from './lib/createStateManagerAndRoute';
 
 // tslint:disable:completed-docs
