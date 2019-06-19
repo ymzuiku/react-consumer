@@ -20,7 +20,15 @@ export function createRoute<S>(Consumer: any) {
       <Consumer>
         {(state: S) => {
           const s = state as any;
-          if (s.route.paths[s.route.paths.length - 1].indexOf(path) === 0) {
+          const nowPathList = s.route.paths[s.route.paths.length - 1].split('/');
+          const newPathList = path.split('/');
+          let match = true;
+          nowPathList.forEach((str: string, i: number) => {
+            if (str !== newPathList[i]) {
+              match = false;
+            }
+          });
+          if (match) {
             return children;
           }
 

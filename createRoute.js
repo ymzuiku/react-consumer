@@ -9,7 +9,15 @@ function createRoute(Consumer) {
         var path = _a.path, children = _a.children;
         return (React.createElement(Consumer, null, function (state) {
             var s = state;
-            if (s.route.paths[s.route.paths.length - 1].indexOf(path) === 0) {
+            var nowPathList = s.route.paths[s.route.paths.length - 1].split('/');
+            var newPathList = path.split('/');
+            var match = true;
+            nowPathList.forEach(function (str, i) {
+                if (str !== newPathList[i]) {
+                    match = false;
+                }
+            });
+            if (match) {
                 return children;
             }
             return null;
