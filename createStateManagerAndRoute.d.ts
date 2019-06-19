@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { IRouteProps } from './createRoute';
 import { IConsumerProps, IStore } from './createStateManager';
 export interface IRouteState {

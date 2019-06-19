@@ -5,7 +5,7 @@
   "types": "createStateManager.d.ts",
   "license": "MIT",
   "scripts": {
-    "lib": "tsc example/src/lib/*.tsx --jsx react --outDir ./ -d true -t ES5"
+    "lib": "cp -rf example/src/lib ./ && tsc lib/*.tsx --jsx react --outDir ./ -d true -t ES5"
   },
   "dependencies": {
     "immer": "^3.1.3",
