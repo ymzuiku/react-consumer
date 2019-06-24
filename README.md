@@ -14,7 +14,7 @@ yarn add react-consumer
 
 源码可以直接看此仓库的 `createStateManager.tsx` 文件，代码仅有几十行。
 
-### 2. 实例化 store, Provider, Consumer
+### 2. 实例化 store, Consumer
 
 ```js
 import { createStateManager } from 'react-consumer/createStateManager';
@@ -28,29 +28,9 @@ const initState = {
   },
 };
 
-const { store, Provider, Consumer } = createStateManager(initState);
+const { store, Consumer } = createStateManager(initState);
 
-export { store, Provider, Consumer };
-```
-
-### 3. 在项目顶部注册 Provider
-
-```js
-import './index.css';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Page from './Page';
-import { Provider, Consumer } from './store';
-
-function App() {
-  return (
-    <Provider>
-      <Page />
-    </Provider>
-  );
-}
-
-ReactDOM.render(<App />, document.getElementById('root'));
+export { store, Consumer };
 ```
 
 ## 状态管理的使用
@@ -115,13 +95,13 @@ const initState = {
   },
 };
 
-const { Provider, Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute(initState, '/app');
+const { Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute(initState, '/app');
 
 // 创建一个路由组件，捆绑 Consumer 和 path，params 的状态获取方法
 const Route = createRoute(Consumer, (v: State) => v.route.path, (v: State) => v.route.params);
 
 // 将 Route 导出，在页面中使用
-export { Provider, Consumer, store, Route, dispatchRoute };
+export { Consumer, store, Route, dispatchRoute };
 ```
 
 在任何一个页面使用路由, 只有当路径匹配时, 子组件才会渲染, 路由可以嵌套使用:
