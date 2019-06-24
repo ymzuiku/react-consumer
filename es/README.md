@@ -1,3 +1,11 @@
+> 此分支是为了兼容低版本 React; React 16.8 以下不支持 hooks \ React 16.3 以下不支持 context
+
+> 此分支使用发布订阅代替 context, 并自行实现 memo 对比
+
+> 历史分支 Example: http://consumer.workos.top
+
+> 此分支 Example: http://consumer2.workos.top
+
 # 此库是内部分享状态管理的一个产物
 
 旨在阐述清楚 声明式 的状态管理思路，以 React 作为例子，思路适用于所有 声明式 UI 的状态管理方案
@@ -6,10 +14,10 @@
 
 ## 状态管理的配置
 
-### 1. 安装依赖
+### 1. 安装依赖 beta 版本
 
 ```sh
-yarn add react-consumer
+yarn add react-consumer@beta
 ```
 
 源码可以直接看此仓库的 `createStateManager.tsx` 文件，代码仅有几十行。

@@ -14,10 +14,10 @@
 
 ## 状态管理的配置
 
-### 1. 安装依赖
+### 1. 安装依赖 beta 版本
 
 ```sh
-yarn add react-consumer
+yarn add react-consumer@beta
 ```
 
 源码可以直接看此仓库的 `createStateManager.tsx` 文件，代码仅有几十行。
