@@ -6,11 +6,11 @@ import { App } from './pages/App';
 import { InfiniteList } from './pages/InfiniteList';
 import { User } from './pages/User';
 import * as serviceWorker from './serviceWorker';
-import { Provider, Route } from './store';
+import { Route } from './store';
 
 const Root: React.FC = () => {
   return (
-    <Provider>
+    <>
       <Route path="/app">
         <App />
       </Route>
@@ -20,7 +20,7 @@ const Root: React.FC = () => {
       <Route path="/infinite-list">
         <InfiniteList />
       </Route>
-    </Provider>
+    </>
   );
 };
 

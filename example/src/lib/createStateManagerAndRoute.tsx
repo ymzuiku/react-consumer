@@ -1,7 +1,6 @@
-import * as queryString from 'query-string';
-
 import { createRoute, IRouteProps } from './createRoute';
-import { createStateManager, IConsumerProps, IStore } from './createStateManager';
+import { createStateManager, IConsumerProps } from './createStateManager';
+import { parserUrl } from './parserUrl';
 
 /**
  * 根据浏览器访问的URL初始化路径
@@ -40,7 +39,7 @@ export interface IRouteState {
 export function createStateManagerAndRoute<S>(initState: S, defaultPath: string = '/') {
   const routeState: IRouteState = {
     route: {
-      params: [queryString.parse(window.location.search)],
+      params: [parserUrl.parse(window.location.search)],
       paths: initPaths(defaultPath),
     },
   };
@@ -50,7 +49,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
     ...routeState,
   };
 
-  const { Provider, Consumer, store } = createStateManager<S>(initState);
+  const { Consumer, store } = createStateManager<S>(initState);
   const Route = createRoute<S>(Consumer);
 
   type IRouteListenFn = (path: string, param: object | undefined, state: S) => boolean;
@@ -93,7 +92,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
       state.route.params[state.route.params.length - 1] = param;
 
       if (typeof window !== 'undefined') {
-        window.history.replaceState(null, path, `${path}?${queryString.stringify(param)}`);
+        window.history.replaceState(null, path, `${path}?${parserUrl.stringify(param)}`);
       }
     });
   };
@@ -111,7 +110,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
       if (param) {
         state.route.params.push(param);
         if (typeof window !== 'undefined') {
-          window.history.pushState(null, path, `${path}?${queryString.stringify(param)}`);
+          window.history.pushState(null, path, `${path}?${parserUrl.stringify(param)}`);
         }
       } else {
         if (typeof window !== 'undefined') {
@@ -149,11 +148,23 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
   };
 
   const dispatchRoute = {
+    /**
+     * 移走一个路由或者去到指定路径的路由，并且更新视图
+     */
     back: dispatchRouteBack,
+    /**
+     * 为route的变化添加监听，如果监听函数返回不是 true，则拦截此次的路由变化
+     */
     listen: routeListen,
+    /**
+     * 推进一个新的路由，并且更新 AppState
+     */
     push: dispatchRoutePush,
+    /**
+     * 替换当前路由状态
+     */
     replace: dispatchRouteReplace,
   };
 
-  return { Provider, Consumer, store, Route, dispatchRoute };
+  return { Consumer, store, Route, dispatchRoute };
 }

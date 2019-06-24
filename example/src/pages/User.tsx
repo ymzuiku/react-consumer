@@ -8,13 +8,13 @@ export const User: React.FC = () => {
     <div>
       <header>
         <h3>User Page</h3>
-        <Consumer>{state => <h3>Route: {JSON.stringify(state.route.paths)} </h3>}</Consumer>
+        <Consumer memo={st => st.route.paths}>{st => <h3>Route: {JSON.stringify(st.route.paths)} </h3>}</Consumer>
         <button onClick={dispatchs.addNumber}>add number</button>
         <button onClick={() => dispatchRoute.push('/infinite-list')}>Go To InfiniteList Page</button>
         <button onClick={() => dispatchRoute.back()}>Go Back</button>
       </header>
       <section>
-        <Consumer>{state => <div>{state.user.info.num}</div>}</Consumer>
+        <Consumer>{st => <div>{st.user.info.num}</div>}</Consumer>
       </section>
     </div>
   );

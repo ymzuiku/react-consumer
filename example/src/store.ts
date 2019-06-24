@@ -1,14 +1,4 @@
-import { createStateManagerAndRoute, IRouteState } from './lib/createStateManagerAndRoute';
-
-// tslint:disable:completed-docs
-export interface IState extends IRouteState {
-  user: {
-    infinite: string[];
-    info: {
-      num: number;
-    };
-  };
-}
+import { createStateManagerAndRoute } from './lib/createStateManagerAndRoute';
 
 const infinite = [];
 for (let i = 0; i < 50000; i++) {
@@ -28,9 +18,11 @@ const initState = {
   },
 };
 
-const { Provider, Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute<IState>(initState, '/app');
+const { Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute(initState, '/app');
 
-export { Provider, Consumer, store, Route, dispatchRoute };
+export { Consumer, store, Route, dispatchRoute };
 
-const w = window as any;
-w.store = store;
+if (process.env.NODE_ENV === 'development') {
+  const w = window as any;
+  w.store = store;
+}

@@ -17,7 +17,7 @@ export interface IRouteProps {
 export function createRoute<S>(Consumer: any) {
   return function Route({ path, children }: IRouteProps) {
     return (
-      <Consumer>
+      <Consumer memo={(s: any) => [s.route.paths[s.route.paths.length - 1]]}>
         {(state: S) => {
           const s = state as any;
           const nowPathList = s.route.paths[s.route.paths.length - 1].split('/');

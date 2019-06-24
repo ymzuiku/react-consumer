@@ -1,23 +1,6 @@
 import produce from 'immer';
 import * as React from 'react';
 
-export interface IStore<S> extends React.Context<S> {
-  /**
-   * 全局状态
-   */
-  state: S;
-  /**
-   * 安全的获取全局状态
-   * getState(s=>s.dog) return { name: 'dog', age: 10}
-   * getState(s=>s.dog.cat[10].abc) return undefined
-   */
-  getState(fn?: (state: S) => S | any): S | any;
-  /**
-   * 更新全局状态，及发布视图更新
-   */
-  setState(fn: (state: S) => void): any;
-}
-
 export interface IConsumerProps<S> {
   /**
    * children
@@ -26,55 +9,122 @@ export interface IConsumerProps<S> {
   /**
    * 设置 useMemo 在 props
    */
+  listen?(state: S): void;
+  /**
+   * 设置 useMemo 在 props
+   */
   memo?(state: S): any[];
 }
 
 /**
- * 实例化 {store, Consumer, Provider}
+ * 实例化 {store, Consumer}
  */
 export function createStateManager<S>(initalState: S) {
   // 创建一个  context, 用于后续配合 useContext 进行更新组件
-  const store = React.createContext(initalState) as IStore<S>;
+  let idNumber = 0;
+  const subscribes: { [key: number]: (state: S) => any } = {};
 
-  store.state = initalState;
-  store.setState = fn => {
-    store.state = produce(store.state, fn);
-  };
-  store.getState = fn => {
-    if (fn) {
-      try {
-        return fn(store.state);
-      } catch (err) {
-        return undefined;
+  const store = {
+    /**
+     * 安全的获取全局状态
+     * getState(s=>s.dog) return { name: 'dog', age: 10}
+     * getState(s=>s.dog.cat[10].abc) return undefined
+     */
+    getState: (fn: (state: S) => any) => {
+      if (fn) {
+        try {
+          return fn(store.state);
+        } catch (err) {
+          return undefined;
+        }
       }
+
+      return store.state;
+    },
+    /**
+     * 更新全局状态，及发布视图更新
+     */
+    setState: (fn: (state: S) => void) => {
+      store.state = produce(store.state, (draft: S) => fn(draft));
+      // tslint:disable-next-line
+      for (const k in subscribes) {
+        subscribes[k](store.state);
+      }
+    },
+    /**
+     * 全局状态
+     */
+    state: initalState,
+    /**
+     * 订阅列表
+     */
+    subscribes,
+  };
+
+  const listren = (fn: (state: S) => any) => {
+    idNumber++;
+    if (idNumber > 999999998) {
+      idNumber = 0;
+    }
+    const id = idNumber;
+    subscribes[id] = fn;
+
+    return () => {
+      // tslint:disable-next-line
+      delete subscribes[id];
+    };
+  };
+
+  class Consumer extends React.Component<IConsumerProps<S>> {
+    private lastMemo: any[] = [];
+    private readonly unListen: () => void;
+    public constructor(props: IConsumerProps<S>) {
+      super(props);
+      if (this.props.memo !== undefined) {
+        this.lastMemo = [...this.props.memo(store.state)];
+      }
+
+      this.unListen = listren(this.handleListen);
     }
 
-    return store.state;
-  };
+    public componentWillUnmount() {
+      this.unListen();
+    }
 
-  // 创建一个提供者组件
-  const Provider: React.FC = props => {
-    const [state, setState] = React.useState<S>(store.state);
+    public handleListen = (state: S) => {
+      const { listen, memo } = this.props;
+      if (listen !== undefined) {
+        listen(state);
+      }
+      if (memo !== undefined) {
+        if (memo.length === 0) {
+          return;
+        }
+        const nowMemo = memo(store.state);
+        let isNeedUpdate = false;
+        for (let i = 0; i < this.lastMemo.length; i++) {
+          if (this.lastMemo[i] !== nowMemo[i]) {
+            isNeedUpdate = true;
+            break;
+          }
+        }
+        if (isNeedUpdate) {
+          this.lastMemo = [...nowMemo];
+          this.forceUpdate();
+        }
+      } else {
+        this.forceUpdate();
+      }
+    };
 
-    // 使用 immer 进行更新状态, 确保未更新的对象还是旧的引用
-    store.setState = fn => setState(produce(state, fn));
-    store.state = state;
+    public render() {
+      return this.props.children(store.state);
+    }
 
-    return <store.Provider value={state} {...props} />;
-  };
+    public shouldComponentUpdate = () => {
+      return false;
+    };
+  }
 
-  // 创建一个消费者组件
-  const Consumer: React.FC<IConsumerProps<S>> = ({ children, memo }) => {
-    const state = React.useContext<S>(store);
-
-    return React.useMemo(
-      () => {
-        return children(state);
-      },
-      // tslint:disable-next-line
-      memo ? memo(state) : undefined,
-    );
-  };
-
-  return { Provider, store, Consumer };
+  return { store, Consumer };
 }
