@@ -1,7 +1,6 @@
-import * as queryString from 'query-string';
-
 import { createRoute, IRouteProps } from './createRoute';
-import { createStateManager, IConsumerProps, IStore } from './createStateManager';
+import { createStateManager, IConsumerProps } from './createStateManager';
+import { queryString } from './queryString';
 
 /**
  * 根据浏览器访问的URL初始化路径
@@ -50,7 +49,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
     ...routeState,
   };
 
-  const { Provider, Consumer, store } = createStateManager<S>(initState);
+  const { Consumer, store } = createStateManager<S>(initState);
   const Route = createRoute<S>(Consumer);
 
   type IRouteListenFn = (path: string, param: object | undefined, state: S) => boolean;
@@ -149,11 +148,23 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
   };
 
   const dispatchRoute = {
+    /**
+     * 移走一个路由或者去到指定路径的路由，并且更新视图
+     */
     back: dispatchRouteBack,
+    /**
+     * 为route的变化添加监听，如果监听函数返回不是 true，则拦截此次的路由变化
+     */
     listen: routeListen,
+    /**
+     * 推进一个新的路由，并且更新 AppState
+     */
     push: dispatchRoutePush,
+    /**
+     * 替换当前路由状态
+     */
     replace: dispatchRouteReplace,
   };
 
-  return { Provider, Consumer, store, Route, dispatchRoute };
+  return { Consumer, store, Route, dispatchRoute };
 }

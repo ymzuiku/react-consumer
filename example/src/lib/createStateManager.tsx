@@ -75,9 +75,9 @@ export function createStateManager<S>(initalState: S) {
     };
   };
 
-  class Consumer extends React.Component<IConsumerProps<S>> {
-    private lastMemo: any[] = [];
-    private readonly unListen: () => void;
+  const Consumer = class extends React.Component<IConsumerProps<S>> {
+    public lastMemo: any[] = [];
+    public unListen: () => void;
     public constructor(props: IConsumerProps<S>) {
       super(props);
       if (this.props.memo !== undefined) {
@@ -124,7 +124,7 @@ export function createStateManager<S>(initalState: S) {
     public shouldComponentUpdate = () => {
       return false;
     };
-  }
+  };
 
   return { store, Consumer };
 }

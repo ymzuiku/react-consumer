@@ -1,11 +1,11 @@
 {
   "name": "react-consumer",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "main": "createStateManager.js",
   "types": "createStateManager.d.ts",
   "license": "MIT",
   "scripts": {
-    "lib": "cp -rf example/src/lib ./ && tsc lib/*.tsx --jsx react --outDir ./ -d true -t ES5"
+    "lib": "tscu example/src/lib --outDir es"
   },
   "dependencies": {
     "immer": "^3.1.3"
@@ -14,6 +14,7 @@
     "@types/jest": "24.0.13",
     "@types/node": "8.10.39",
     "@types/react": "16.8.19",
-    "@types/react-dom": "16.8.4"
+    "@types/react-dom": "16.8.4",
+    "tscu": "^1.1.8"
   }
 }
