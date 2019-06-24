@@ -1,6 +1,6 @@
 import { createRoute, IRouteProps } from './createRoute';
 import { createStateManager, IConsumerProps } from './createStateManager';
-import { parserUrl } from './parserUrl';
+import { queryString } from './queryString';
 
 /**
  * 根据浏览器访问的URL初始化路径
@@ -39,7 +39,7 @@ export interface IRouteState {
 export function createStateManagerAndRoute<S>(initState: S, defaultPath: string = '/') {
   const routeState: IRouteState = {
     route: {
-      params: [parserUrl.parse(window.location.search)],
+      params: [queryString.parse(window.location.search)],
       paths: initPaths(defaultPath),
     },
   };
@@ -92,7 +92,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
       state.route.params[state.route.params.length - 1] = param;
 
       if (typeof window !== 'undefined') {
-        window.history.replaceState(null, path, `${path}?${parserUrl.stringify(param)}`);
+        window.history.replaceState(null, path, `${path}?${queryString.stringify(param)}`);
       }
     });
   };
@@ -110,7 +110,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
       if (param) {
         state.route.params.push(param);
         if (typeof window !== 'undefined') {
-          window.history.pushState(null, path, `${path}?${parserUrl.stringify(param)}`);
+          window.history.pushState(null, path, `${path}?${queryString.stringify(param)}`);
         }
       } else {
         if (typeof window !== 'undefined') {

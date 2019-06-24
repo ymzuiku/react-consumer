@@ -1,4 +1,4 @@
-export const parserUrl = {
+export const queryString = {
   parse: (str: string): { [key: string]: string } => {
     const obj: { [key: string]: any } = {};
     const seg = str.replace(/^\?/, '').split('&');
