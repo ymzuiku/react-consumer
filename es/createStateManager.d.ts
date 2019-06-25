@@ -35,9 +35,7 @@ export declare function createStateManager<S>(initalState: S): {
         /**
          * 订阅列表
          */
-        subscribes: {
-            [key: number]: (state: S) => any;
-        };
+        subscribes: Set<unknown>;
     };
     Consumer: {
         new (props: IConsumerProps<S>): {

@@ -1,6 +1,6 @@
 {
   "name": "react-consumer",
-  "version": "0.2.1-beta",
+  "version": "0.2.2-beta",
   "main": "createStateManager.js",
   "types": "createStateManager.d.ts",
   "license": "MIT",

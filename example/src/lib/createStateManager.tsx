@@ -21,8 +21,8 @@ export interface IConsumerProps<S> {
  */
 export function createStateManager<S>(initalState: S) {
   // 创建一个  context, 用于后续配合 useContext 进行更新组件
-  let idNumber = 0;
-  const subscribes: { [key: number]: (state: S) => any } = {};
+  const idNumber = 0;
+  const subscribes = new Set();
 
   const store = {
     /**
@@ -46,10 +46,11 @@ export function createStateManager<S>(initalState: S) {
      */
     setState: (fn: (state: S) => void) => {
       store.state = produce(store.state, (draft: S) => fn(draft));
-      // tslint:disable-next-line
-      for (const k in subscribes) {
-        subscribes[k](store.state);
-      }
+
+      subscribes.forEach(value => {
+        const sub = value as (state: S) => any;
+        sub(store.state);
+      });
     },
     /**
      * 全局状态
@@ -62,16 +63,11 @@ export function createStateManager<S>(initalState: S) {
   };
 
   const listren = (fn: (state: S) => any) => {
-    idNumber++;
-    if (idNumber > 999999998) {
-      idNumber = 0;
-    }
-    const id = idNumber;
-    subscribes[id] = fn;
+    subscribes.add(fn);
 
     return () => {
       // tslint:disable-next-line
-      delete subscribes[id];
+      subscribes.delete(fn);
     };
   };
 

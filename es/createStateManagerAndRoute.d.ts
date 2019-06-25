@@ -45,9 +45,7 @@ export declare function createStateManagerAndRoute<S>(initState: S, defaultPath?
         getState: (fn: (state: S) => any) => any;
         setState: (fn: (state: S) => void) => void;
         state: S;
-        subscribes: {
-            [key: number]: (state: S) => any;
-        };
+        subscribes: Set<unknown>;
     };
     Route: ({ path, children }: IRouteProps) => JSX.Element;
     dispatchRoute: {
