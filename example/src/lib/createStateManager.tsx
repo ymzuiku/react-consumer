@@ -1,11 +1,13 @@
 import produce from 'immer';
 import * as React from 'react';
 
+type IMemoGet<S> = (fn: (state: S) => any) => any;
+
 export interface IConsumerProps<S> {
   /**
    * children
    */
-  children(state: S): any;
+  children(state: S, get: IMemoGet<S>): any;
   /**
    * 设置 useMemo 在 props
    */
@@ -21,7 +23,6 @@ export interface IConsumerProps<S> {
  */
 export function createStateManager<S>(initalState: S) {
   // 创建一个  context, 用于后续配合 useContext 进行更新组件
-  const idNumber = 0;
   const subscribes = new Set();
 
   const store = {
@@ -73,7 +74,9 @@ export function createStateManager<S>(initalState: S) {
 
   const Consumer = class extends React.Component<IConsumerProps<S>> {
     public lastMemo: any[] = [];
+    public nowMeme: any[] = [];
     public unListen: () => void;
+    private isInited = false;
     public constructor(props: IConsumerProps<S>) {
       super(props);
       if (this.props.memo !== undefined) {
@@ -81,6 +84,10 @@ export function createStateManager<S>(initalState: S) {
       }
 
       this.unListen = listren(this.handleListen);
+    }
+
+    public componentDidMount() {
+      this.isInited = true;
     }
 
     public componentWillUnmount() {
@@ -92,29 +99,46 @@ export function createStateManager<S>(initalState: S) {
       if (listen !== undefined) {
         listen(state);
       }
-      if (memo !== undefined) {
-        if (memo.length === 0) {
-          return;
+      let nowMemo: any;
+
+      if (memo === undefined) {
+        nowMemo = this.nowMeme;
+      } else if (memo.length !== 0) {
+        nowMemo = memo(store.state);
+      }
+
+      let isNeedUpdate = false;
+      for (let i = 0; i < this.lastMemo.length; i++) {
+        if (this.lastMemo[i] !== nowMemo[i]) {
+          isNeedUpdate = true;
+          break;
         }
-        const nowMemo = memo(store.state);
-        let isNeedUpdate = false;
-        for (let i = 0; i < this.lastMemo.length; i++) {
-          if (this.lastMemo[i] !== nowMemo[i]) {
-            isNeedUpdate = true;
-            break;
-          }
-        }
-        if (isNeedUpdate) {
-          this.lastMemo = [...nowMemo];
-          this.forceUpdate();
-        }
-      } else {
+      }
+
+      this.lastMemo = [...nowMemo];
+      this.nowMeme = [];
+
+      if (isNeedUpdate) {
         this.forceUpdate();
       }
     };
+    public memoGet: IMemoGet<S> = fn => {
+      let out: any;
+      try {
+        out = fn(store.state);
+      } catch (err) {
+        out = undefined;
+      }
+      if (this.isInited) {
+        this.lastMemo.push(out);
+      }
+      this.nowMeme.push(out);
+
+      return out;
+    };
 
     public render() {
-      return this.props.children(store.state);
+      return this.props.children(store.state, this.memoGet);
     }
 
     public shouldComponentUpdate = () => {

@@ -12,7 +12,7 @@ export interface IRow {
 const Row = ({ index, style }: IRow) => {
   return (
     <div style={style}>
-      <Consumer memo={st => [st.user.infinite[index]]}>{st => <div> Row {st.user.infinite[index]}</div>}</Consumer>
+      <Consumer>{(s, get) => <div> Row {get(st => st.user.infinite[index])}</div>}</Consumer>
       <button onClick={() => dispatchs.changeInfiniteIndex(index)}>add number</button>
     </div>
   );

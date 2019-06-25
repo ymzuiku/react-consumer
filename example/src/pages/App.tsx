@@ -16,7 +16,7 @@ export const App: React.FC = () => {
         <button onClick={() => dispatchRoute.push('/infinite-list')}>Go To InfiniteList Page</button>
       </header>
       <section>
-        <Consumer>{st => <div>{st.user.info.num}</div>}</Consumer>
+        <Consumer>{(_, get) => <div>get:{get(st => st.user.info.num)}</div>}</Consumer>
       </section>
     </div>
   );
