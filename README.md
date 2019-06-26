@@ -83,7 +83,7 @@ function Page() {
   return (
     <div className="app">
       <p>最简单的例子</p>
-      <Consumer  beforeUpdate=(()=>console.log('此组件更新之前的回调')) memo={state => [state.user.info.num]}>{([num]) => <h2>{num}</h2>}</Consumer>
+      <Consumer memo={state => [state.user.info.num]}>{([num]) => <h2>{num}</h2>}</Consumer>
       <button onClick={dispatchs.dispatchOfAddNum}>点击仅重绘number</button>
     </div>
   );
