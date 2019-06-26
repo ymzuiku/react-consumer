@@ -2,8 +2,6 @@
 
 旨在阐述清楚 声明式 的状态管理思路，以 React 作为例子，思路适用于所有 声明式 UI 的状态管理方案
 
-[查看历史版本 README](./old-version/README.md)
-
 此版本的改动：
 
 - 兼容低版本 React, 不依赖 context 和 hooks
