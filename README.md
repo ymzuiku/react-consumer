@@ -66,11 +66,11 @@ export function dispatchOfAddNum() {
 
 Consumer API
 
-| props        | 类型                     | 描述                                                                 |
-| ------------ | ------------------------ | -------------------------------------------------------------------- |
-| memo         | (state) => any[]         | 返回一个数组对象, 只有当数组对象变更了, 才会更新组件                 |
-| beforeUpdate | (memo, state) => void    | 当组件将要更新之前的回调                                             |
-| children     | (memo, state) => element | Consumer 的子组件是一个函数(renderProps), 返回值是 memo 对象和 state |
+| props        | 类型                             | 描述                                                                   |
+| ------------ | -------------------------------- | ---------------------------------------------------------------------- |
+| memo         | `(state) => any[]`               | 返回一个数组对象, 只有当数组对象变更了, 才会更新组件                   |
+| beforeUpdate | `(memo, state) => void`          | 当组件将要更新之前的回调                                               |
+| children     | `(memo, state) => React.Element` | Consumer 的子组件是一个函数(renderProps), 函数参数是 memo 对象和 state |
 
 示例：
 
