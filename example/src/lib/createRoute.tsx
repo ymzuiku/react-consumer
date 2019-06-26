@@ -18,13 +18,15 @@ export function createRoute<S>(Consumer: any) {
   return function Route({ path, children }: IRouteProps) {
     return (
       <Consumer memo={(s: any) => [s.route.paths[s.route.paths.length - 1]]}>
-        {(state: S) => {
-          const s = state as any;
-          const nowPathList = s.route.paths[s.route.paths.length - 1].split('/');
-          const newPathList = path.split('/');
+        {([p]: [string]) => {
+          // if (!p) {
+          //   return null;
+          // }
+          const nowPathList = p.split('/');
+          const nextPathList = path.split('/');
           let match = true;
           nowPathList.forEach((str: string, i: number) => {
-            if (str !== newPathList[i]) {
+            if (str !== nextPathList[i]) {
               match = false;
             }
           });

@@ -8,7 +8,8 @@ export const App: React.FC = () => {
     <div>
       <header>
         <h3>App Page</h3>
-        <Consumer memo={st => st.route.paths}>{st => <h3>Route: {JSON.stringify(st.route.paths)} </h3>}</Consumer>
+        <Consumer memo={st => [st.route.paths]}>{([paths]) => <h4>Route: {JSON.stringify(paths)} </h4>}</Consumer>
+        <Consumer memo={st => [st.route.params]}>{([params]) => <h4>Params: {JSON.stringify(params)} </h4>}</Consumer>
         <button onClick={dispatchs.addNumber}>add number</button>
         <button onClick={() => dispatchRoute.push('/user', { dog: 'wangwang', cc: ['123', 33, 'aaa'] })}>
           Go User Page
@@ -16,7 +17,7 @@ export const App: React.FC = () => {
         <button onClick={() => dispatchRoute.push('/infinite-list')}>Go To InfiniteList Page</button>
       </header>
       <section>
-        <Consumer>{(_, get) => <div>get:{get(st => st.user.info.num)}</div>}</Consumer>
+        <Consumer memo={st => [st.user.info.num]}>{([num]) => <div>get:{num}</div>}</Consumer>
       </section>
     </div>
   );

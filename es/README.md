@@ -2,9 +2,7 @@
 
 > 此分支使用发布订阅代替 context, 并自行实现 memo 对比
 
-> 历史分支 Example: http://consumer.workos.top
-
-> 此分支 Example: http://consumer2.workos.top
+> 此分支 Example: http://consumer3.workos.top
 
 # 此库是内部分享状态管理的一个产物
 
@@ -74,7 +72,7 @@ function Page() {
   return (
     <div className="app">
       <p>最简单的例子</p>
-      <Consumer>{state => <h2>{state.user.info.num}</h2>}</Consumer>
+      <Consumer memo={state => [state.user.info.num]}>{([num]) => <h2>{num}</h2>}</Consumer>
       <button onClick={dispatchs.dispatchOfAddNum}>点击仅重绘number</button>
     </div>
   );

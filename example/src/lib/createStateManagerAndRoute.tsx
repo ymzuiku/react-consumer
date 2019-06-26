@@ -100,22 +100,16 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
   /**
    * 推进一个新的路由，并且更新 AppState
    */
-  const dispatchRoutePush = (path: string, param?: { [key: string]: any }) => {
+  const dispatchRoutePush = (path: string, param?: { [key: string]: any }, stopPush?: boolean) => {
     if (!routeListenFnsChecker(param)) {
       return;
     }
 
     store.setState((state: any) => {
       state.route.paths.push(path);
-      if (param) {
-        state.route.params.push(param);
-        if (typeof window !== 'undefined') {
-          window.history.pushState(null, path, `${path}?${queryString.stringify(param)}`);
-        }
-      } else {
-        if (typeof window !== 'undefined') {
-          window.history.pushState(null, path, path);
-        }
+      state.route.params.push(param || {});
+      if (typeof window !== 'undefined' && !stopPush) {
+        window.history.pushState(null, path, param ? `${path}?${queryString.stringify(param)}` : path);
       }
     });
   };
@@ -123,14 +117,10 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
   /**
    * 移走一个路由或者去到指定路径的路由，并且更新视图
    */
-  const dispatchRouteBack = (index?: number) => {
+  const dispatchRouteBack = (index?: number, stopBack?: boolean) => {
     const realState = store.state as any;
 
-    let _index: number = index as any;
-    if (typeof index !== 'number' || index === undefined) {
-      _index = realState.route.params.length - 1;
-    }
-    _index = _index < 0 ? 0 : _index;
+    const _index = index === undefined ? realState.route.paths.length - 1 : index;
 
     const param = realState.route.params[_index];
 
@@ -140,12 +130,39 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
 
     store.setState((state: any) => {
       for (let i = 0; i < state.route.paths.length - _index; i++) {
-        window.history.back();
+        if (!stopBack) {
+          window.history.back();
+        }
         state.route.paths.pop();
         state.route.params.pop();
       }
     });
   };
+
+  if (typeof window !== 'undefined') {
+    const onPopState = () => {
+      const realState = store.state as any;
+
+      const paths = realState.route.paths;
+
+      if (window.location.pathname !== paths[paths.length - 1]) {
+        let isPop = false;
+        paths.forEach((p: string, i: number) => {
+          if (p === window.location.pathname) {
+            isPop = true;
+          }
+        });
+        if (isPop) {
+          dispatchRouteBack(undefined, true);
+        } else {
+          const search = window.location.search;
+          dispatchRoutePush(window.location.pathname, search === '' ? undefined : queryString.parse(search), true);
+        }
+      }
+    };
+
+    window.addEventListener('popstate', onPopState);
+  }
 
   const dispatchRoute = {
     /**
