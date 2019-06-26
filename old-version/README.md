@@ -1,18 +1,10 @@
-> 兼容低版本 React, 不依赖 context 和 hooks; React 16.8 以下不支持 hooks \ React 16.3 以下不支持 context
-
-> 使用发布订阅代替 context, 不需要 Provider, 并自行实现 memo 对比
-
 # 此库是内部分享状态管理的一个产物
+
+> 此为历史版本：version: 0.1.10
 
 旨在阐述清楚 声明式 的状态管理思路，以 React 作为例子，思路适用于所有 声明式 UI 的状态管理方案
 
-[查看历史版本 README](./old-version/README.md)
-
-此版本的改动：
-
-- 强制需要描述 memo 对象, 并且使用 memo 对象作为渲染, 这样的习惯可以让重绘控制在非常颗粒的 dom 元素
-- 使用发布订阅代替 context , 从而更好的适应 React 插件的检查
-- (可选的)内置一个路由组件, 并且由状态管理管理好了路由及路由参数
+使用 create-react-app 创建一个新的工程，我们会使用 react 原生的 api 轻松实现一个状态管理：
 
 ## 状态管理的配置
 
@@ -24,7 +16,7 @@ yarn add react-consumer
 
 源码可以直接看此仓库的 `createStateManager.tsx` 文件，代码仅有几十行。
 
-### 2. 实例化 store, Consumer
+### 2. 实例化 store, Provider, Consumer
 
 ```js
 import { createStateManager } from 'react-consumer/createStateManager';
@@ -38,9 +30,29 @@ const initState = {
   },
 };
 
-const { store, Consumer } = createStateManager(initState);
+const { store, Provider, Consumer } = createStateManager(initState);
 
-export { store, Consumer };
+export { store, Provider, Consumer };
+```
+
+### 3. 在项目顶部注册 Provider
+
+```js
+import './index.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Page from './Page';
+import { Provider, Consumer } from './store';
+
+function App() {
+  return (
+    <Provider>
+      <Page />
+    </Provider>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 ## 状态管理的使用
@@ -67,16 +79,6 @@ export function dispatchOfAddNum() {
 
 ### 2. 在代码中使用状态和触发状态
 
-Consumer API
-
-| props        | 类型                             | 描述                                                                 |
-| ------------ | -------------------------------- | -------------------------------------------------------------------- |
-| memo         | `(state) => any[]`               | 返回一个数组对象, 只有当数组对象变更了, 才会更新组件                 |
-| beforeUpdate | `(memo, state) => void`          | 当组件将要更新之前的回调                                             |
-| children     | `(memo, state) => React.Element` | Consumer 的子组件是一个函数(renderProps), 返回值是 memo 对象和 state |
-
-示例：
-
 ```js
 import React from 'react';
 import * as dispatchs from './dispatchs';
@@ -86,7 +88,7 @@ function Page() {
   return (
     <div className="app">
       <p>最简单的例子</p>
-      <Consumer  beforeUpdate=(()=>console.log('此组件更新之前的回调')) memo={state => [state.user.info.num]}>{([num]) => <h2>{num}</h2>}</Consumer>
+      <Consumer>{state => <h2>{state.user.info.num}</h2>}</Consumer>
       <button onClick={dispatchs.dispatchOfAddNum}>点击仅重绘number</button>
     </div>
   );
@@ -115,13 +117,13 @@ const initState = {
   },
 };
 
-const { Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute(initState, '/app');
+const { Provider, Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute(initState, '/app');
 
 // 创建一个路由组件，捆绑 Consumer 和 path，params 的状态获取方法
 const Route = createRoute(Consumer, (v: State) => v.route.path, (v: State) => v.route.params);
 
 // 将 Route 导出，在页面中使用
-export { Consumer, store, Route, dispatchRoute };
+export { Provider, Consumer, store, Route, dispatchRoute };
 ```
 
 在任何一个页面使用路由, 只有当路径匹配时, 子组件才会渲染, 路由可以嵌套使用:

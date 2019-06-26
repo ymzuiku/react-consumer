@@ -76,6 +76,9 @@ export function createStateManager<S>(initalState: S) {
     private isInited = false;
     public constructor(props: IConsumerProps<S>) {
       super(props);
+      if (this.props.memo === undefined) {
+        throw new Error('<Consumer /> need "memo" props');
+      }
       this.lastMemo = [...this.props.memo(store.state)];
 
       this.unListen = listren(this.handleListen);

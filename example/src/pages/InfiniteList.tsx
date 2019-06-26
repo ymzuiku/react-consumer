@@ -24,7 +24,9 @@ export const InfiniteList: React.FC = () => {
       <header>
         <h3>Infinite Page</h3>
         <Consumer memo={st => [st.route.paths]}>{([paths]) => <h4>Route: {JSON.stringify(paths)} </h4>}</Consumer>
-        <Consumer memo={st => [st.route.params]}>{([params]) => <h4>Params: {JSON.stringify(params)} </h4>}</Consumer>
+        <Consumer memo={st => [st.route.params[st.route.params.length - 1]]}>
+          {([param]) => <h4>Param: {JSON.stringify(param)} </h4>}
+        </Consumer>
         <button onClick={() => dispatchRoute.replace({ dog: Math.random() })}>Replace params</button>
         <button onClick={() => dispatchRoute.back()}>Go Back</button>
         <button onClick={() => dispatchRoute.back(0)}>Go Root Page</button>

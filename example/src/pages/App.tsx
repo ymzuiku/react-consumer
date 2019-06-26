@@ -9,7 +9,9 @@ export const App: React.FC = () => {
       <header>
         <h3>App Page</h3>
         <Consumer memo={st => [st.route.paths]}>{([paths]) => <h4>Route: {JSON.stringify(paths)} </h4>}</Consumer>
-        <Consumer memo={st => [st.route.params]}>{([params]) => <h4>Params: {JSON.stringify(params)} </h4>}</Consumer>
+        <Consumer memo={st => [st.route.params[st.route.params.length - 1]]}>
+          {([param]) => <h4>Param: {JSON.stringify(param)} </h4>}
+        </Consumer>
         <button onClick={dispatchs.addNumber}>add number</button>
         <button onClick={() => dispatchRoute.push('/user', { dog: 'wangwang', cc: ['123', 33, 'aaa'] })}>
           Go User Page

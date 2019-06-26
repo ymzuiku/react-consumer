@@ -1,21 +1,25 @@
-> 此分支是为了兼容低版本 React; React 16.8 以下不支持 hooks \ React 16.3 以下不支持 context
+> 兼容低版本 React, 不依赖 context 和 hooks; React 16.8 以下不支持 hooks \ React 16.3 以下不支持 context
 
-> 此分支使用发布订阅代替 context, 并自行实现 memo 对比
-
-> 此分支 Example: http://consumer3.workos.top
+> 使用发布订阅代替 context, 不需要 Provider, 并自行实现 memo 对比
 
 # 此库是内部分享状态管理的一个产物
 
 旨在阐述清楚 声明式 的状态管理思路，以 React 作为例子，思路适用于所有 声明式 UI 的状态管理方案
 
-使用 create-react-app 创建一个新的工程，我们会使用 react 原生的 api 轻松实现一个状态管理：
+[查看历史版本 README](./old-version/README.md)
+
+此版本的改动：
+
+- 强制需要描述 memo 对象, 并且使用 memo 对象作为渲染, 这样的习惯可以让重绘控制在非常颗粒的 dom 元素
+- 使用发布订阅代替 context , 从而更好的适应 React 插件的检查
+- (可选的)内置一个路由组件, 并且由状态管理管理好了路由及路由参数
 
 ## 状态管理的配置
 
-### 1. 安装依赖 beta 版本
+### 1. 安装依赖
 
 ```sh
-yarn add react-consumer@beta
+yarn add react-consumer
 ```
 
 源码可以直接看此仓库的 `createStateManager.tsx` 文件，代码仅有几十行。
@@ -63,6 +67,16 @@ export function dispatchOfAddNum() {
 
 ### 2. 在代码中使用状态和触发状态
 
+Consumer API
+
+| props        | 类型                             | 描述                                                                 |
+| ------------ | -------------------------------- | -------------------------------------------------------------------- |
+| memo         | `(state) => any[]`               | 返回一个数组对象, 只有当数组对象变更了, 才会更新组件                 |
+| beforeUpdate | `(memo, state) => void`          | 当组件将要更新之前的回调                                             |
+| children     | `(memo, state) => React.Element` | Consumer 的子组件是一个函数(renderProps), 返回值是 memo 对象和 state |
+
+示例：
+
 ```js
 import React from 'react';
 import * as dispatchs from './dispatchs';
@@ -72,7 +86,7 @@ function Page() {
   return (
     <div className="app">
       <p>最简单的例子</p>
-      <Consumer memo={state => [state.user.info.num]}>{([num]) => <h2>{num}</h2>}</Consumer>
+      <Consumer  beforeUpdate=(()=>console.log('此组件更新之前的回调')) memo={state => [state.user.info.num]}>{([num]) => <h2>{num}</h2>}</Consumer>
       <button onClick={dispatchs.dispatchOfAddNum}>点击仅重绘number</button>
     </div>
   );
