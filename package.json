@@ -1,11 +1,12 @@
 {
   "name": "react-consumer",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "main": "createStateManager.js",
   "types": "createStateManager.d.ts",
   "license": "MIT",
   "scripts": {
-    "lib": "tscu example/src/lib --outDir es --copy 'package.json, README.md'"
+    "cp": "cp -rf example/src/lib ./lib",
+    "lib": "yarn cp && tscu example/src/lib --outDir es --copy 'package.json, README.md'"
   },
   "dependencies": {
     "immer": "^3.1.3"

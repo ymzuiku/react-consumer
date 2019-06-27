@@ -3,17 +3,13 @@ import * as React from 'react';
 
 export interface IConsumerProps<S> {
   /**
-   * beforeUnmount
-   */
-  beforeUnmount?(memo: any[]): any;
-  /**
    * beforeUpdate
    */
-  beforeUpdate?(memo: any[]): any;
+  beforeUpdate?(memo: any[], state: S): void;
   /**
    * children
    */
-  children(memo: any[]): any;
+  children(memo: any[], state: S): any;
   /**
    * 设置 useMemo 在 props
    */
@@ -94,9 +90,6 @@ export function createStateManager<S>(initalState: S) {
 
     public componentWillUnmount() {
       this.unListen();
-      if (this.props.beforeUnmount) {
-        this.props.beforeUnmount(this.lastMemo);
-      }
     }
 
     public handleListen = (state: S) => {
@@ -116,14 +109,14 @@ export function createStateManager<S>(initalState: S) {
 
       if (isNeedUpdate) {
         if (beforeUpdate !== undefined) {
-          beforeUpdate(nowMemo);
+          beforeUpdate(nowMemo, store.state);
         }
         this.forceUpdate();
       }
     };
 
     public render() {
-      return this.props.children(this.lastMemo);
+      return this.props.children(this.lastMemo, store.state);
     }
 
     public shouldComponentUpdate = () => {
