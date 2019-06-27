@@ -19,9 +19,6 @@ export function createRoute<S>(Consumer: any) {
     return (
       <Consumer memo={(s: any) => [s.route.paths[s.route.paths.length - 1]]}>
         {([p]: [string]) => {
-          // if (!p) {
-          //   return null;
-          // }
           const nowPathList = p.split('/');
           const nextPathList = path.split('/');
           let match = true;
