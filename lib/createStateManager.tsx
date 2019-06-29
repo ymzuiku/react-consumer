@@ -3,13 +3,17 @@ import * as React from 'react';
 
 export interface IConsumerProps<S> {
   /**
+   * beforeUnmount
+   */
+  beforeUnmount?(memo: any[]): any;
+  /**
    * beforeUpdate
    */
-  beforeUpdate?(memo: any[], state: S): void;
+  beforeUpdate?(memo: any[]): any;
   /**
    * children
    */
-  children(memo: any[], state: S): any;
+  children(memo: any[]): any;
   /**
    * 设置 useMemo 在 props
    */
@@ -25,33 +29,6 @@ export function createStateManager<S>(initalState: S) {
 
   const store = {
     /**
-     * 安全的获取全局状态
-     * getState(s=>s.dog) return { name: 'dog', age: 10}
-     * getState(s=>s.dog.cat[10].abc) return undefined
-     */
-    getState: (fn: (state: S) => any) => {
-      if (fn) {
-        try {
-          return fn(store.state);
-        } catch (err) {
-          return undefined;
-        }
-      }
-
-      return store.state;
-    },
-    /**
-     * 更新全局状态，及发布视图更新
-     */
-    setState: (fn: (state: S) => void) => {
-      store.state = produce(store.state, (draft: S) => fn(draft));
-
-      subscribes.forEach(value => {
-        const sub = value as (state: S) => any;
-        sub(store.state);
-      });
-    },
-    /**
      * 全局状态
      */
     state: initalState,
@@ -59,6 +36,17 @@ export function createStateManager<S>(initalState: S) {
      * 订阅列表
      */
     subscribes,
+    /**
+     * 更新全局状态，及发布视图更新
+     */
+    updateState: (fn: (state: S) => void) => {
+      store.state = produce(store.state, (draft: S) => fn(draft));
+
+      subscribes.forEach((value) => {
+        const sub = value as (state: S) => any;
+        sub(store.state);
+      });
+    },
   };
 
   const listren = (fn: (state: S) => any) => {
@@ -90,6 +78,9 @@ export function createStateManager<S>(initalState: S) {
 
     public componentWillUnmount() {
       this.unListen();
+      if (this.props.beforeUnmount) {
+        this.props.beforeUnmount(this.lastMemo);
+      }
     }
 
     public handleListen = (state: S) => {
@@ -109,14 +100,14 @@ export function createStateManager<S>(initalState: S) {
 
       if (isNeedUpdate) {
         if (beforeUpdate !== undefined) {
-          beforeUpdate(nowMemo, store.state);
+          beforeUpdate(nowMemo);
         }
         this.forceUpdate();
       }
     };
 
     public render() {
-      return this.props.children(this.lastMemo, store.state);
+      return this.props.children(this.lastMemo);
     }
 
     public shouldComponentUpdate = () => {

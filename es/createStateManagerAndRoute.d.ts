@@ -42,17 +42,16 @@ export declare function createStateManagerAndRoute<S>(initState: S, defaultPath?
         contextType?: import("react").Context<any>;
     };
     store: {
-        getState: (fn: (state: S) => any) => any;
-        setState: (fn: (state: S) => void) => void;
         state: S;
         subscribes: Set<unknown>;
+        updateState: (fn: (state: S) => void) => void;
     };
     Route: ({ path, children }: IRouteProps) => JSX.Element;
     dispatchRoute: {
         /**
          * 移走一个路由或者去到指定路径的路由，并且更新视图
          */
-        back: (index?: number) => void;
+        back: (index?: number, stopBack?: boolean) => void;
         /**
          * 为route的变化添加监听，如果监听函数返回不是 true，则拦截此次的路由变化
          */
@@ -62,7 +61,7 @@ export declare function createStateManagerAndRoute<S>(initState: S, defaultPath?
          */
         push: (path: string, param?: {
             [key: string]: any;
-        }) => void;
+        }, stopPush?: boolean) => void;
         /**
          * 替换当前路由状态
          */

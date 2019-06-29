@@ -1,33 +1,27 @@
 import * as React from 'react';
 export interface IConsumerProps<S> {
     /**
+     * beforeUnmount
+     */
+    beforeUnmount?(memo: any[]): any;
+    /**
+     * beforeUpdate
+     */
+    beforeUpdate?(memo: any[]): any;
+    /**
      * children
      */
-    children(state: S): any;
+    children(memo: any[]): any;
     /**
      * 设置 useMemo 在 props
      */
-    listen?(state: S): void;
-    /**
-     * 设置 useMemo 在 props
-     */
-    memo?(state: S): any[];
+    memo(state: S): any[];
 }
 /**
  * 实例化 {store, Consumer}
  */
 export declare function createStateManager<S>(initalState: S): {
     store: {
-        /**
-         * 安全的获取全局状态
-         * getState(s=>s.dog) return { name: 'dog', age: 10}
-         * getState(s=>s.dog.cat[10].abc) return undefined
-         */
-        getState: (fn: (state: S) => any) => any;
-        /**
-         * 更新全局状态，及发布视图更新
-         */
-        setState: (fn: (state: S) => void) => void;
         /**
          * 全局状态
          */
@@ -36,6 +30,10 @@ export declare function createStateManager<S>(initalState: S): {
          * 订阅列表
          */
         subscribes: Set<unknown>;
+        /**
+         * 更新全局状态，及发布视图更新
+         */
+        updateState: (fn: (state: S) => void) => void;
     };
     Consumer: {
         new (props: IConsumerProps<S>): {

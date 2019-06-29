@@ -29,33 +29,6 @@ export function createStateManager<S>(initalState: S) {
 
   const store = {
     /**
-     * 安全的获取全局状态
-     * getState(s=>s.dog) return { name: 'dog', age: 10}
-     * getState(s=>s.dog.cat[10].abc) return undefined
-     */
-    getState: (fn: (state: S) => any) => {
-      if (fn) {
-        try {
-          return fn(store.state);
-        } catch (err) {
-          return undefined;
-        }
-      }
-
-      return store.state;
-    },
-    /**
-     * 更新全局状态，及发布视图更新
-     */
-    setState: (fn: (state: S) => void) => {
-      store.state = produce(store.state, (draft: S) => fn(draft));
-
-      subscribes.forEach(value => {
-        const sub = value as (state: S) => any;
-        sub(store.state);
-      });
-    },
-    /**
      * 全局状态
      */
     state: initalState,
@@ -63,6 +36,17 @@ export function createStateManager<S>(initalState: S) {
      * 订阅列表
      */
     subscribes,
+    /**
+     * 更新全局状态，及发布视图更新
+     */
+    updateState: (fn: (state: S) => void) => {
+      store.state = produce(store.state, (draft: S) => fn(draft));
+
+      subscribes.forEach((value) => {
+        const sub = value as (state: S) => any;
+        sub(store.state);
+      });
+    },
   };
 
   const listren = (fn: (state: S) => any) => {
@@ -77,7 +61,6 @@ export function createStateManager<S>(initalState: S) {
   const Consumer = class extends React.Component<IConsumerProps<S>> {
     public lastMemo: any[] = [];
     public unListen: () => void;
-    private isInited = false;
     public constructor(props: IConsumerProps<S>) {
       super(props);
       if (this.props.memo === undefined) {
@@ -86,10 +69,6 @@ export function createStateManager<S>(initalState: S) {
       this.lastMemo = [...this.props.memo(store.state)];
 
       this.unListen = listren(this.handleListen);
-    }
-
-    public componentDidMount() {
-      this.isInited = true;
     }
 
     public componentWillUnmount() {

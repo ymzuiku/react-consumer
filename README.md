@@ -53,7 +53,7 @@ import { store } from './store';
 
 export function dispatchOfAddNum() {
   // 在任何异步结束之后，处理状态更新
-  store.setState(state => {
+  store.updateState((state) => {
     // 此处执行区域是 immer 的更新函数，所以直接赋值即可，不需要返回整个 state
     state.user.info.num += 1;
   });
@@ -82,7 +82,7 @@ function Page() {
   return (
     <div className="app">
       <p>最简单的例子</p>
-      <Consumer memo={state => [state.user.info.num]}>{([num]) => <h2>{num}</h2>}</Consumer>
+      <Consumer memo={(state) => [state.user.info.num]}>{([num]) => <h2>{num}</h2>}</Consumer>
       <button onClick={dispatchs.dispatchOfAddNum}>点击仅重绘number</button>
     </div>
   );

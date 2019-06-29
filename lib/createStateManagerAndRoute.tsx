@@ -88,7 +88,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
     const realState = store.state as any;
     const path = realState.route.paths[realState.route.paths.length - 1];
 
-    store.setState((state: any) => {
+    store.updateState((state: any) => {
       state.route.params[state.route.params.length - 1] = param;
 
       if (typeof window !== 'undefined') {
@@ -105,7 +105,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
       return;
     }
 
-    store.setState((state: any) => {
+    store.updateState((state: any) => {
       state.route.paths.push(path);
       state.route.params.push(param || {});
       if (typeof window !== 'undefined' && !stopPush) {
@@ -128,7 +128,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
       return;
     }
 
-    store.setState((state: any) => {
+    store.updateState((state: any) => {
       for (let i = 0; i < state.route.paths.length - _index; i++) {
         if (!stopBack) {
           window.history.back();
