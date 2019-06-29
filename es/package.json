@@ -5,7 +5,7 @@
   "types": "createStateManager.d.ts",
   "license": "MIT",
   "scripts": {
-    "cp": "cp -rf example/src/lib ./lib",
+    "cp": "cp -rf example/src/lib ./",
     "lib": "yarn cp && tscu example/src/lib --outDir es --copy 'package.json, README.md, .npmignore'"
   },
   "dependencies": {

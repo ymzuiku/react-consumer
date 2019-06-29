@@ -2,21 +2,13 @@ import produce from 'immer';
 import * as React from 'react';
 
 export interface IConsumerProps<S> {
-  /**
-   * beforeUnmount
-   */
+  /* beforeUnmount */
   beforeUnmount?(memo: any[]): any;
-  /**
-   * beforeUpdate
-   */
+  /* beforeUpdate */
   beforeUpdate?(memo: any[]): any;
-  /**
-   * children
-   */
+  /* children */
   children(memo: any[]): any;
-  /**
-   * 设置 useMemo 在 props
-   */
+  /* 设置 useMemo 在 props */
   memo(state: S): any[];
 }
 
@@ -27,18 +19,23 @@ export function createStateManager<S>(initalState: S) {
   // 创建一个  context, 用于后续配合 useContext 进行更新组件
   const subscribes = new Set();
 
+  const listren = (fn: (state: S) => any) => {
+    subscribes.add(fn);
+
+    return () => {
+      // tslint:disable-next-line
+      subscribes.delete(fn);
+    };
+  };
+
   const store = {
-    /**
-     * 全局状态
-     */
+    /* 订阅 */
+    listren,
+    /* 全局状态 */
     state: initalState,
-    /**
-     * 订阅列表
-     */
+    /* 订阅列表 */
     subscribes,
-    /**
-     * 更新全局状态，及发布视图更新
-     */
+    /* 更新全局状态，及发布视图更新 */
     updateState: (fn: (state: S) => void) => {
       store.state = produce(store.state, (draft: S) => fn(draft));
 
@@ -49,19 +46,9 @@ export function createStateManager<S>(initalState: S) {
     },
   };
 
-  const listren = (fn: (state: S) => any) => {
-    subscribes.add(fn);
-
-    return () => {
-      // tslint:disable-next-line
-      subscribes.delete(fn);
-    };
-  };
-
   const Consumer = class extends React.Component<IConsumerProps<S>> {
     public lastMemo: any[] = [];
     public unListen: () => void;
-    private isInited = false;
     public constructor(props: IConsumerProps<S>) {
       super(props);
       if (this.props.memo === undefined) {
@@ -70,10 +57,6 @@ export function createStateManager<S>(initalState: S) {
       this.lastMemo = [...this.props.memo(store.state)];
 
       this.unListen = listren(this.handleListen);
-    }
-
-    public componentDidMount() {
-      this.isInited = true;
     }
 
     public componentWillUnmount() {
