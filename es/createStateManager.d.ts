@@ -1,20 +1,8 @@
 import * as React from 'react';
 export interface IConsumerProps<S> {
-    /**
-     * beforeUnmount
-     */
     beforeUnmount?(memo: any[]): any;
-    /**
-     * beforeUpdate
-     */
     beforeUpdate?(memo: any[]): any;
-    /**
-     * children
-     */
     children(memo: any[]): any;
-    /**
-     * 设置 useMemo 在 props
-     */
     memo(state: S): any[];
 }
 /**
@@ -22,17 +10,9 @@ export interface IConsumerProps<S> {
  */
 export declare function createStateManager<S>(initalState: S): {
     store: {
-        /**
-         * 全局状态
-         */
+        listren: (fn: (state: S) => any) => () => void;
         state: S;
-        /**
-         * 订阅列表
-         */
         subscribes: Set<unknown>;
-        /**
-         * 更新全局状态，及发布视图更新
-         */
         updateState: (fn: (state: S) => void) => void;
     };
     Consumer: {

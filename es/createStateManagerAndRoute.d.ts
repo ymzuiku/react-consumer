@@ -42,6 +42,7 @@ export declare function createStateManagerAndRoute<S>(initState: S, defaultPath?
         contextType?: import("react").Context<any>;
     };
     store: {
+        listren: (fn: (state: S) => any) => () => void;
         state: S;
         subscribes: Set<unknown>;
         updateState: (fn: (state: S) => void) => void;
