@@ -47,7 +47,7 @@ export declare function createStateManagerAndRoute<S>(initState: S, defaultPath?
         subscribes: Set<unknown>;
         updateState: (fn: (state: S) => void) => void;
     };
-    Route: ({ path, children }: IRouteProps) => JSX.Element;
+    Route: ({ style, path, keep, children, ...rest }: IRouteProps) => JSX.Element;
     dispatchRoute: {
         /**
          * 移走一个路由或者去到指定路径的路由，并且更新视图

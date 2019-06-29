@@ -11,13 +11,13 @@ import { Route } from './store';
 const Root: React.FC = () => {
   return (
     <>
-      <Route path="/app">
+      <Route path="/app" keep={true}>
         <App />
       </Route>
       <Route path="/user">
         <User />
       </Route>
-      <Route path="/infinite-list">
+      <Route path="/infinite-list" keep={true}>
         <InfiniteList />
       </Route>
     </>
