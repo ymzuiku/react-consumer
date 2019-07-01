@@ -89,7 +89,10 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
     const thePath = path || realState.route.paths[realState.route.paths.length - 1];
 
     store.updateState((state: any) => {
-      state.route.params[state.route.params.length - 1] = param;
+      if (param) {
+        state.route.params[state.route.params.length - 1] = param;
+      }
+      state.route.paths[state.route.paths.length - 1] = thePath;
 
       if (typeof window !== 'undefined') {
         window.history.replaceState(null, thePath, param ? `${path}?${queryString.stringify(param)}` : thePath);
