@@ -66,7 +66,7 @@ export declare function createStateManagerAndRoute<S>(initState: S, defaultPath?
         /**
          * 替换当前路由状态
          */
-        replace: (param: {
+        replace: (path: string, param?: {
             [key: string]: any;
         }) => void;
     };

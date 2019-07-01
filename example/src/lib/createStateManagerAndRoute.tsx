@@ -80,19 +80,19 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
   /**
    * 替换当前路由状态
    */
-  const dispatchRouteReplace = (param: { [key: string]: any }) => {
+  const dispatchRouteReplace = (path: string | undefined, param?: { [key: string]: any }) => {
     if (!routeListenFnsChecker(param)) {
       return;
     }
 
     const realState = store.state as any;
-    const path = realState.route.paths[realState.route.paths.length - 1];
+    const thePath = path || realState.route.paths[realState.route.paths.length - 1];
 
     store.updateState((state: any) => {
       state.route.params[state.route.params.length - 1] = param;
 
       if (typeof window !== 'undefined') {
-        window.history.replaceState(null, path, `${path}?${queryString.stringify(param)}`);
+        window.history.replaceState(null, thePath, param ? `${path}?${queryString.stringify(param)}` : thePath);
       }
     });
   };
