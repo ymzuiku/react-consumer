@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "cp": "cp -rf example/src/lib ./",
-    "lib": "yarn cp && tscu example/src/lib --outDir es --copy 'package.json, README.md, .npmignore'"
+    "lib": "tscu example/src/lib --outDir es --outLib lib --copy 'package.json, README.md, .npmignore'"
   },
   "dependencies": {
     "immer": "^3.1.3"
@@ -16,6 +16,6 @@
     "@types/node": "8.10.39",
     "@types/react": "16.8.19",
     "@types/react-dom": "16.8.4",
-    "tscu": "^1.1.8"
+    "tscu": "^1.2.4"
   }
 }
