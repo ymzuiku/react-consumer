@@ -1,6 +1,7 @@
+import * as queryString from 'querystring';
+
 import { createRoute, IRouteProps } from './createRoute';
 import { createStateManager, IConsumerProps } from './createStateManager';
-import { queryString } from './queryString';
 
 /**
  * 根据浏览器访问的URL初始化路径
