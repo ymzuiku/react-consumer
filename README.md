@@ -22,7 +22,7 @@ yarn add react-consumer
 ### 2. 实例化 store, Consumer
 
 ```js
-import { createStateManager } from 'react-consumer/createStateManager';
+import { createStateManager } from 'react-consumer';
 
 // 一个多层级的对象示例，以验证immutable
 const initState = {
@@ -91,11 +91,11 @@ function Page() {
 export default Page;
 ```
 
-## 捆绑路由
+## 捆绑路由(可选)
 
 路由最好使用 react-router, 使用 dispatch 为 history 封装一层，这样就可以很好的管理状态和路由。
 
-`createStateManagerAndRoute` 对象内部实现了一个迷你的路由，可以无缝将路由也接入状态管理，旨在给出一个路由关联的思路, 具体可以查看 `example/lib/createStateManagerAndRoute.tsx` 文件。
+本组件内部 `createStateManagerAndRoute` 对象内部实现了一个迷你的路由，可以无缝将路由也接入状态管理，旨在给出一个路由关联的思路, 具体可以查看 `example/lib/createStateManagerAndRoute.tsx` 文件。
 
 我们用刚刚的例子，修改实例化 store 的文件：
 
