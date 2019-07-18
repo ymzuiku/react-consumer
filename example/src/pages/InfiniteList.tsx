@@ -12,7 +12,7 @@ export interface IRow {
 const Row = ({ index, style }: IRow) => {
   return (
     <div style={style}>
-      <Consumer memo={st => [st.user.infinite[index]]}>{([id]) => <div> Row {id}</div>}</Consumer>
+      <Consumer memo={(st) => [st.user.infinite[index]]}>{([id]) => <div> Row {id}</div>}</Consumer>
       <button onClick={() => dispatchs.changeInfiniteIndex(index)}>change this {index}</button>
     </div>
   );
@@ -23,13 +23,13 @@ export const InfiniteList: React.FC = () => {
     <div>
       <header>
         <h3>Infinite Page</h3>
-        <Consumer memo={st => [st.route.paths]}>{([paths]) => <h4>Route: {JSON.stringify(paths)} </h4>}</Consumer>
-        <Consumer memo={st => [st.route.params[st.route.params.length - 1]]}>
+        <Consumer memo={(st) => [st.route.paths]}>{([paths]) => <h4>Route: {JSON.stringify(paths)} </h4>}</Consumer>
+        <Consumer memo={(st) => [st.route.params[st.route.params.length - 1]]}>
           {([param]) => <h4>Param: {JSON.stringify(param)} </h4>}
         </Consumer>
-        <button onClick={() => dispatchRoute.replace({ dog: Math.random() })}>Replace params</button>
-        <button onClick={() => dispatchRoute.back()}>Go Back</button>
-        <button onClick={() => dispatchRoute.back(0)}>Go Root Page</button>
+        <button onClick={() => dispatchRoute.replace(undefined, { dog: Math.random() })}>Replace params</button>
+        <button onClick={() => dispatchRoute.pop()}>Go Back</button>
+        <button onClick={() => dispatchRoute.pop(0)}>Go Root Page</button>
         <Route path="/infinite-list/aaa">
           <h5>sub-route</h5>
         </Route>

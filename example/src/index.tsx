@@ -6,9 +6,13 @@ import { App } from './pages/App';
 import { InfiniteList } from './pages/InfiniteList';
 import { User } from './pages/User';
 import * as serviceWorker from './serviceWorker';
-import { Route } from './store';
+import { dispatchRoute, Route } from './store';
 
 const Root: React.FC = () => {
+  React.useEffect(() => {
+    dispatchRoute.initRoute('/app');
+  }, []);
+
   return (
     <>
       <Route path="/app" keep={true}>

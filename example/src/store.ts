@@ -18,7 +18,7 @@ const initState = {
   },
 };
 
-const { Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute(initState, '/app');
+const { Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute(initState);
 
 export { Consumer, store, Route, dispatchRoute };
 

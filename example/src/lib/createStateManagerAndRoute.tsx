@@ -1,30 +1,8 @@
+import { statement } from '@babel/template';
+import * as queryString from 'querystring';
+
 import { createRoute, IRouteProps } from './createRoute';
 import { createStateManager, IConsumerProps } from './createStateManager';
-import { queryString } from './queryString';
-
-/**
- * 根据浏览器访问的URL初始化路径
- */
-function initPaths(def: string) {
-  if (typeof window === 'undefined') {
-    return ['/'];
-  }
-
-  const path = window.location.pathname;
-
-  if (path === '/' || path === def) {
-    window.history.replaceState(null, def, def);
-
-    return [def];
-  }
-
-  const search = window.location.search;
-
-  window.history.replaceState(null, def, def);
-  window.history.pushState(null, path, path + search);
-
-  return [def, path];
-}
 
 export interface IRouteState {
   route: {
@@ -36,11 +14,11 @@ export interface IRouteState {
 /**
  * 创建状态管理及路由控制
  */
-export function createStateManagerAndRoute<S>(initState: S, defaultPath: string = '/') {
+export function createStateManagerAndRoute<S>(initState: S, isKeepHistory?: boolean) {
   const routeState: IRouteState = {
     route: {
-      params: [queryString.parse(window.location.search)],
-      paths: initPaths(defaultPath),
+      params: [],
+      paths: [],
     },
   };
 
@@ -62,14 +40,15 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
     routeListenFns.push(fn);
   };
 
-  const routeListenFnsChecker = (param?: { [key: string]: any }) => {
+  const routeListenFnsChecker = (path: string, param?: { [key: string]: any }) => {
+    if (!path) {
+      return true;
+    }
     let isBlock = true;
-    const realState = store.state as any;
-    const path = realState.route.paths[realState.route.paths.length - 1];
 
     for (const fn of routeListenFns) {
       isBlock = fn(path, param, store.state);
-      if (isBlock) {
+      if (!isBlock) {
         break;
       }
     }
@@ -81,12 +60,12 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
    * 替换当前路由状态
    */
   const dispatchRouteReplace = (path: string | undefined, param?: { [key: string]: any }) => {
-    if (!routeListenFnsChecker(param)) {
-      return;
-    }
-
     const realState = store.state as any;
     const thePath = path || realState.route.paths[realState.route.paths.length - 1];
+
+    if (!routeListenFnsChecker(thePath, param)) {
+      return;
+    }
 
     store.updateState((state: any) => {
       if (param) {
@@ -104,14 +83,14 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
    * 推进一个新的路由，并且更新 AppState
    */
   const dispatchRoutePush = (path: string, param?: { [key: string]: any }, stopPush?: boolean) => {
-    if (!routeListenFnsChecker(param)) {
+    if (!routeListenFnsChecker(path, param)) {
       return;
     }
 
     store.updateState((state: any) => {
       state.route.paths.push(path);
       state.route.params.push(param || {});
-      if (typeof window !== 'undefined' && !stopPush) {
+      if (typeof window !== 'undefined' && !stopPush && !isKeepHistory) {
         window.history.pushState(null, path, param ? `${path}?${queryString.stringify(param)}` : path);
       }
     });
@@ -120,14 +99,15 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
   /**
    * 移走一个路由或者去到指定路径的路由，并且更新视图
    */
-  const dispatchRouteBack = (index?: number, stopBack?: boolean) => {
+  const dispatchRoutePop = (index?: number, stopBack?: boolean) => {
     const realState = store.state as any;
 
     const _index = index === undefined ? realState.route.paths.length - 1 : index;
 
-    const param = realState.route.params[_index];
+    const path = realState.route.paths[_index - 1];
+    const param = realState.route.params[_index - 1];
 
-    if (!routeListenFnsChecker(param)) {
+    if (!routeListenFnsChecker(path, param)) {
       return;
     }
 
@@ -156,7 +136,7 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
           }
         });
         if (isPop) {
-          dispatchRouteBack(undefined, true);
+          dispatchRoutePop(undefined, true);
         } else {
           const search = window.location.search;
           dispatchRoutePush(window.location.pathname, search === '' ? undefined : queryString.parse(search), true);
@@ -166,25 +146,46 @@ export function createStateManagerAndRoute<S>(initState: S, defaultPath: string 
 
     window.addEventListener('popstate', onPopState);
   }
+  /**
+   * 根据浏览器访问的URL初始化路径
+   */
+  function dispatchInitRoute(def: string) {
+    store.updateState((s: any) => {
+      s.route = {
+        params: [],
+        paths: [],
+      };
+    });
+
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const path = window.location.pathname;
+    const search = window.location.search;
+
+    if (path === '/' || path === def) {
+      dispatchRoutePush(def);
+    } else {
+      dispatchRoutePush(def);
+      dispatchRoutePush(path, search ? queryString.parse(search) : undefined);
+    }
+  }
 
   const dispatchRoute = {
-    /**
-     * 移走一个路由或者去到指定路径的路由，并且更新视图
-     */
-    back: dispatchRouteBack,
-    /**
-     * 为route的变化添加监听，如果监听函数返回不是 true，则拦截此次的路由变化
-     */
+    /** 重新初始化路由 */
+    initRoute: dispatchInitRoute,
+    /** 为route的变化添加监听，如果监听函数返回不是 true，则拦截此次的路由变化 */
     listen: routeListen,
-    /**
-     * 推进一个新的路由，并且更新 AppState
-     */
+    /** 移走一个路由或者去到指定路径的路由，并且更新视图 */
+    pop: dispatchRoutePop,
+    /** 推进一个新的路由，并且更新 AppState */
     push: dispatchRoutePush,
-    /**
-     * 替换当前路由状态
-     */
+    /** 替换当前路由状态 */
     replace: dispatchRouteReplace,
   };
+
+  // dispatchInitRoute(defaultPath);
 
   return { Consumer, store, Route, dispatchRoute };
 }
