@@ -1,11 +1,10 @@
 {
   "name": "react-consumer",
-  "version": "0.2.16",
+  "version": "0.2.17",
   "main": "createStateManager.js",
   "types": "createStateManager.d.ts",
   "license": "MIT",
   "scripts": {
-    "cp": "cp -rf example/src/lib ./",
     "lib": "tscu example/src/lib --outDir es --outLib lib --copy 'package.json, README.md, .npmignore'"
   },
   "dependencies": {
