@@ -1,4 +1,5 @@
-import { createStateManagerAndRoute } from './lib/createStateManagerAndRoute';
+import { bindRouteManager } from './lib/bindRouteManager';
+import { createStateManager } from './lib/createStateManager';
 
 const infinite = [];
 for (let i = 0; i < 50000; i++) {
@@ -18,7 +19,8 @@ const initState = {
   },
 };
 
-const { Consumer, store, Route, dispatchRoute } = createStateManagerAndRoute(initState);
+const { Consumer, store } = createStateManager(initState);
+const { Route, dispatchRoute } = bindRouteManager(Consumer, store);
 
 export { Consumer, store, Route, dispatchRoute };
 

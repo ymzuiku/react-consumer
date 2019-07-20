@@ -1,8 +1,6 @@
-import { statement } from '@babel/template';
 import * as queryString from 'querystring';
 
-import { createRoute, IRouteProps } from './createRoute';
-import { createStateManager, IConsumerProps } from './createStateManager';
+import { createRoute, IRouteProps } from './_createRoute';
 
 export interface IRouteState {
   route: {
@@ -14,20 +12,14 @@ export interface IRouteState {
 /**
  * 创建状态管理及路由控制
  */
-export function createStateManagerAndRoute<S>(initState: S, isKeepHistory?: boolean) {
-  const routeState: IRouteState = {
-    route: {
+export function bindRouteManager<S>(Consumer: any, store: any, isKeepHistory?: boolean) {
+  store.updateState((s: any) => {
+    s.route = {
       params: [],
       paths: [],
-    },
-  };
+    };
+  });
 
-  initState = {
-    ...initState,
-    ...routeState,
-  };
-
-  const { Consumer, store } = createStateManager<S>(initState);
   const Route = createRoute<S>(Consumer);
 
   type IRouteListenFn = (path: string, param: object | undefined, state: S) => boolean;
@@ -60,7 +52,7 @@ export function createStateManagerAndRoute<S>(initState: S, isKeepHistory?: bool
    * 替换当前路由状态
    */
   const dispatchRouteReplace = (path: string | undefined, param?: { [key: string]: any }) => {
-    const realState = store.state as any;
+    const realState = store.state;
     const thePath = path || realState.route.paths[realState.route.paths.length - 1];
 
     if (!routeListenFnsChecker(thePath, param)) {
@@ -100,7 +92,7 @@ export function createStateManagerAndRoute<S>(initState: S, isKeepHistory?: bool
    * 移走一个路由或者去到指定路径的路由，并且更新视图
    */
   const dispatchRoutePop = (index?: number, stopBack?: boolean) => {
-    const realState = store.state as any;
+    const realState = store.state;
 
     const _index = index === undefined ? realState.route.paths.length - 1 : index;
 
@@ -124,7 +116,7 @@ export function createStateManagerAndRoute<S>(initState: S, isKeepHistory?: bool
 
   if (typeof window !== 'undefined') {
     const onPopState = () => {
-      const realState = store.state as any;
+      const realState = store.state;
 
       const paths = realState.route.paths;
 

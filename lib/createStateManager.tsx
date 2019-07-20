@@ -19,7 +19,7 @@ export function createStateManager<S>(initalState: S) {
   // 创建一个  context, 用于后续配合 useContext 进行更新组件
   const subscribes = new Set();
 
-  const listren = (fn: (state: S) => any) => {
+  const listen = (fn: (state: S) => any) => {
     subscribes.add(fn);
 
     return () => {
@@ -30,7 +30,7 @@ export function createStateManager<S>(initalState: S) {
 
   const store = {
     /* 订阅 */
-    listren,
+    listen,
     /* 全局状态 */
     state: initalState,
     /* 订阅列表 */
@@ -56,7 +56,7 @@ export function createStateManager<S>(initalState: S) {
       }
       this.lastMemo = [...this.props.memo(store.state)];
 
-      this.unListen = listren(this.handleListen);
+      this.unListen = listen(this.handleListen);
     }
 
     public componentWillUnmount() {

@@ -10,7 +10,7 @@ export interface IConsumerProps<S> {
  */
 export declare function createStateManager<S>(initalState: S): {
     store: {
-        listren: (fn: (state: S) => any) => () => void;
+        listen: (fn: (state: S) => any) => () => void;
         state: S;
         subscribes: Set<unknown>;
         updateState: (fn: (state: S) => void) => void;
