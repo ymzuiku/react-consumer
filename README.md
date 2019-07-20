@@ -91,9 +91,9 @@ function Page() {
 export default Page;
 ```
 
-## 其他扩展
+## 扩展阅读
 
-使用 react-consumer 的路由模块：[README_Of_Route](./README_Of_Route.md)
+[使用 react-consumer 的路由模块](./README_Of_Route.md)
 
 ## 单元测试
 
