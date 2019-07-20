@@ -1,6 +1,6 @@
 {
   "name": "react-consumer",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "main": "createStateManager.js",
   "types": "createStateManager.d.ts",
   "license": "MIT",
@@ -15,6 +15,6 @@
     "@types/node": "8.10.39",
     "@types/react": "16.8.19",
     "@types/react-dom": "16.8.4",
-    "tscu": "^1.2.4"
+    "tscu": "^1.2.8"
   }
 }
