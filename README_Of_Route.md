@@ -1,6 +1,8 @@
-路由最好使用 react-router, 使用 dispatch 为 history 封装一层，这样就可以很好的管理状态和路由。
+为了确保整个引用被单一状态管理，状态管理接管路由是非常有效的
 
-本组件内部 `createStateManagerAndRoute` 对象内部实现了一个迷你的路由，可以无缝将路由也接入状态管理，旨在给出一个路由关联的思路, 具体可以查看 `example/lib/createStateManagerAndRoute.tsx` 文件。
+我们可以使用 react-router, 使用 dispatch 为 history 封装一层，这样就可以很好的管理状态和路由。
+
+为了简化开发，react-consumer 的 `bindRouteManager` 对象实现了一个迷你的路由(只有 3kb)，可以无缝将路由也接入状态管理，旨在给出一个路由关联的思路, 具体可以查看 `lib/bindRouteManager.tsx` 文件。
 
 我们用刚刚的例子，修改实例化 store 的文件：
 
