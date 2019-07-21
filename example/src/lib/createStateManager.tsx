@@ -7,7 +7,7 @@ export interface IConsumerProps<S> {
   /* beforeUpdate */
   beforeUpdate?(memo: any[]): any;
   /* children */
-  children(memo: any[]): any;
+  children(memo: any[], state: S): any;
   /* 设置 useMemo 在 props */
   memo(state: S): any[];
 }
@@ -90,7 +90,7 @@ export function createStateManager<S>(initalState: S) {
     };
 
     public render() {
-      return this.props.children(this.lastMemo);
+      return this.props.children(this.lastMemo, store.state);
     }
 
     public shouldComponentUpdate = () => {
