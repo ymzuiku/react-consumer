@@ -5,6 +5,7 @@
     "react-hooks/exhaustive-deps": false
   },
   "rules": {
+    "object-literal-sort-keys": false,
     "prefer-conditional-expression": false,
     "comment-format": false,
     "no-submodule-imports": false,
