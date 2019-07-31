@@ -86,11 +86,7 @@ export function createStateManager<S>(initalState: S) {
         if (beforeUpdate !== undefined) {
           beforeUpdate(nowMemo);
         }
-        if (requestAnimationFrame) {
-          requestAnimationFrame(() => this.forceUpdate());
-        } else {
-          this.forceUpdate();
-        }
+        this.forceUpdate();
       }
     };
 
