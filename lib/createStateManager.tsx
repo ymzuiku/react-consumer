@@ -70,6 +70,7 @@ export function createStateManager<S>(initalState: S) {
       const { beforeUpdate, memo } = this.props;
 
       const nowMemo = memo(store.state);
+
       let isNeedUpdate = false;
 
       for (let i = 0; i < this.lastMemo.length; i++) {
