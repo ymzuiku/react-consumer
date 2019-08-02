@@ -1,4 +1,4 @@
-import * as queryString from 'querystring';
+import * as queryString from 'querystringify';
 
 import { createRoute, IRouteProps } from './_createRoute';
 
