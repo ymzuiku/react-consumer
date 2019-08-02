@@ -1,10 +1,12 @@
 {
   "name": "react-consumer",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "createStateManager.js",
   "types": "createStateManager.d.ts",
   "license": "MIT",
   "scripts": {
+    "no-sync": "mv node_modules node_modules.nosync && ln -s node_modules.nosync/ node_modules",
+    "un-sync": "rm -rf node_modules && mv node_modules.nosync node_modules",
     "lib": "tscu example/src/lib --outDir es --outLib lib --copy 'package.json, README.md, .npmignore'"
   },
   "dependencies": {
