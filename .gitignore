@@ -3,6 +3,7 @@
 # dependencies
 **/react-app-env.d.ts
 **/node_modules
+**/node_modules.nosync
 **/build
 /node_modules
 /.pnp
