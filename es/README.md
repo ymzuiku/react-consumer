@@ -54,7 +54,7 @@ import { store } from './store';
 
 export function dispatchOfAddNum() {
   // 在任何异步结束之后，处理状态更新
-  store.updateState((state) => {
+  store.update((state) => {
     // 此处执行区域是 immer 的更新函数，所以直接赋值即可，不需要返回整个 state
     state.user.info.num += 1;
   });

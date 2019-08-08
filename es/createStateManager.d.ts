@@ -13,7 +13,7 @@ export declare function createStateManager<S>(initalState: S): {
         listen: (fn: (state: S) => any) => () => void;
         state: S;
         subscribes: Set<unknown>;
-        updateState: (fn: (state: S) => void) => void;
+        update: (fn: (state: S) => void) => void;
     };
     Consumer: {
         new (props: IConsumerProps<S>): {
