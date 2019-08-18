@@ -21,10 +21,10 @@ const initState = {
 
 const { Consumer, store } = createStateManager(initState);
 // 使用Consumer，store 捆绑路由
-const { Route, dispatchRoute } = bindRouteManager(Consumer, store);
+const { Route, history } = bindRouteManager(store);
 
 // 将 Route 导出，在页面中使用
-export { Consumer, store, Route, dispatchRoute };
+export { Consumer, store, Route, history };
 ```
 
 在任何一个页面使用路由, 只有当路径匹配时, 子组件才会渲染, 路由可以嵌套使用:
@@ -35,16 +35,14 @@ import { Route } from './store';
 export default () => {
   React.useEffect(() => {
     // 根据URL初始化当前应该去到的页面
-    dispatchRoute.initRoute('/app');
+    history.init('/app');
   }, []);
 
   return (
-    <Route path="/user">
-      <UserPage />
-      <Route path="/user/login">
-        <Login />
-      </Route>
-    </Route>
+    <div>
+      <Route path="/user" component={UserPage} />
+      <Route path="/user/login" component={Login} />
+    </div>
   );
 };
 ```
@@ -52,22 +50,22 @@ export default () => {
 切换路由, 也仅仅是几个预设好的 dispatch:
 
 ```js
-import { dispatchRoute } from './store';
+import { history } from './store';
 
 // 推入一个路由
-dispatchRoute.push('/some-page', { name: 'dog' });
+history.push('/some-page', { name: 'dog' });
 
 // 返回上一次的路由
-dispatchRoute.back();
+history.back();
 
 // 返回首屏的路由
-dispatchRoute.back(0);
+history.back(0);
 
 // 修改当前路由的编写
-dispatchRoute.replace({ name: 100 });
+history.replace('/some-page', { name: 100 });
 
 // 监听路由的变化
-dispatchRoute.listen((path, params, state) => {
+history.listen((path, params, state) => {
   // 如果返回的是false, 拦截此次路由的派发，不更新路由也不更新 AppState
   if (params.name > 50) {
     return false;

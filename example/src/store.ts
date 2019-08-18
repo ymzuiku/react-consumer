@@ -1,5 +1,5 @@
-import { bindRouteManager } from './lib/bindRouteManager';
-import { createStateManager } from './lib/createStateManager';
+import { bindRouteManager } from 'react-consumer/bindRouteManager';
+import { createStateManager } from 'react-consumer/createStateManager';
 
 const infinite = [];
 for (let i = 0; i < 50000; i++) {
@@ -7,10 +7,12 @@ for (let i = 0; i < 50000; i++) {
 }
 
 const initState = {
-  route: {
-    params: [],
-    paths: [],
+  status: {
+    '/App': {},
+    '/InfiniteList': {},
+    '/User': {},
   },
+  paths: [],
   user: {
     infinite,
     info: {
@@ -20,9 +22,9 @@ const initState = {
 };
 
 const { Consumer, store } = createStateManager(initState);
-const { Route, dispatchRoute } = bindRouteManager(Consumer, store);
+const { Route, history } = bindRouteManager(store);
 
-export { Consumer, store, Route, dispatchRoute };
+export { Consumer, store, Route, history };
 
 if (process.env.NODE_ENV === 'development') {
   const w = window as any;

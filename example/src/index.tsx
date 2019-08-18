@@ -6,7 +6,7 @@ import { App } from './pages/App';
 import { InfiniteList } from './pages/InfiniteList';
 import { User } from './pages/User';
 import * as serviceWorker from './serviceWorker';
-import { dispatchRoute, Route } from './store';
+import { history, Route } from './store';
 
 cssin`
 body {
@@ -41,20 +41,14 @@ button:active {
 
 const Root: React.FC = () => {
   React.useEffect(() => {
-    dispatchRoute.initRoute('/app');
+    history.init('/App');
   }, []);
 
   return (
     <>
-      <Route path="/app" keep={true}>
-        <App />
-      </Route>
-      <Route path="/user">
-        <User />
-      </Route>
-      <Route path="/infinite-list" keep={true}>
-        <InfiniteList />
-      </Route>
+      <Route path="/App" component={App} />
+      <Route path="/User" component={User} />
+      <Route path="/InfiniteList" component={InfiniteList} />
     </>
   );
 };
