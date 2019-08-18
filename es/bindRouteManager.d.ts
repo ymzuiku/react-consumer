@@ -1,28 +1,48 @@
-/// <reference types="react" />
-import { IRouteProps } from './_createRoute';
-export interface IRouteState {
-    paths: string[];
-    status: any;
-}
+import { IRouteProps } from './createRoute';
 /**
  * 创建状态管理及路由控制
  */
-export declare function bindRouteManager<S>(Consumer: any, store: any, isKeepHistory?: boolean): {
-    Route: ({ style, path, keep, children, ...rest }: IRouteProps) => JSX.Element;
-    dispatchRoute: {
-        /** 重新初始化路由 */
-        initRoute: (def: string) => void;
-        /** 为route的变化添加监听，如果监听函数返回不是 true，则拦截此次的路由变化 */
-        listen: (fn: (path: string, status: object, state: S) => boolean) => void;
-        /** 移走一个路由或者去到指定路径的路由，并且更新视图 */
-        pop: (index?: any, stopBack?: boolean) => void;
-        /** 推进一个新的路由，并且更新 AppState */
-        push: (path: string, status?: {
-            [key: string]: any;
-        }, stopPush?: boolean) => void;
-        /** 替换当前路由状态 */
-        replace: (path: string, status?: {
-            [key: string]: any;
-        }) => void;
+export declare function bindRouteManager<S>(store: any): {
+    Route: {
+        new (props: IRouteProps): {
+            haveChild: boolean;
+            state: {
+                display: string;
+                realChild: any;
+                isRenderChild: boolean;
+            };
+            hiddenChild: () => void;
+            onHistoryUpdate: () => void;
+            render(): JSX.Element;
+            showChild: () => void;
+            context: any;
+            setState<K extends never>(state: {} | ((prevState: Readonly<{}>, props: Readonly<IRouteProps>) => {} | Pick<{}, K>) | Pick<{}, K>, callback?: () => void): void;
+            forceUpdate(callBack?: () => void): void;
+            readonly props: Readonly<IRouteProps> & Readonly<{
+                children?: import("react").ReactNode;
+            }>;
+            refs: {
+                [key: string]: import("react").ReactInstance;
+            };
+            componentDidMount?(): void;
+            shouldComponentUpdate?(nextProps: Readonly<IRouteProps>, nextState: Readonly<{}>, nextContext: any): boolean;
+            componentWillUnmount?(): void;
+            componentDidCatch?(error: Error, errorInfo: import("react").ErrorInfo): void;
+            getSnapshotBeforeUpdate?(prevProps: Readonly<IRouteProps>, prevState: Readonly<{}>): any;
+            componentDidUpdate?(prevProps: Readonly<IRouteProps>, prevState: Readonly<{}>, snapshot?: any): void;
+            componentWillMount?(): void;
+            UNSAFE_componentWillMount?(): void;
+            componentWillReceiveProps?(nextProps: Readonly<IRouteProps>, nextContext: any): void;
+            UNSAFE_componentWillReceiveProps?(nextProps: Readonly<IRouteProps>, nextContext: any): void;
+            componentWillUpdate?(nextProps: Readonly<IRouteProps>, nextState: Readonly<{}>, nextContext: any): void;
+            UNSAFE_componentWillUpdate?(nextProps: Readonly<IRouteProps>, nextState: Readonly<{}>, nextContext: any): void;
+        };
+        defaultProps: {
+            display: string;
+            sync: string;
+            keep: boolean;
+        };
+        contextType?: import("react").Context<any>;
     };
+    history: import("./createHistory").IHistory;
 };
