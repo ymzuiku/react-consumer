@@ -2,8 +2,8 @@ import * as React from 'react';
 export interface IConsumerProps<S> {
     beforeUnmount?(memo: any[]): any;
     beforeUpdate?(memo: any[]): any;
-    children(memo: any[], state: S): any;
-    memo(state: S): any[];
+    children(...memo: any): any;
+    subscrib(state: S): any[];
 }
 /**
  * 实例化 {store, Consumer}

@@ -7,9 +7,9 @@ export interface IConsumerProps<S> {
   /* beforeUpdate */
   beforeUpdate?(memo: any[]): any;
   /* children */
-  children(memo: any[], state: S): any;
-  /* 设置 useMemo 在 props */
-  memo(state: S): any[];
+  children(...memo: any): any;
+  /* 订阅需要更新的对象 在 props */
+  subscrib(state: S): any[];
 }
 
 /**
@@ -51,10 +51,10 @@ export function createStateManager<S>(initalState: S) {
     public unListen: () => void;
     public constructor(props: IConsumerProps<S>) {
       super(props);
-      if (this.props.memo === undefined) {
-        throw new Error('<Consumer /> need "memo" props');
+      if (this.props.subscrib === undefined) {
+        throw new Error('<Consumer /> need "subscrib" props');
       }
-      this.lastMemo = [...this.props.memo(store.state)];
+      this.lastMemo = [...this.props.subscrib(store.state)];
 
       this.unListen = listen(this.handleListen);
     }
@@ -67,9 +67,9 @@ export function createStateManager<S>(initalState: S) {
     }
 
     public handleListen = (state: S) => {
-      const { beforeUpdate, memo } = this.props;
+      const { beforeUpdate, subscrib } = this.props;
 
-      const nowMemo = memo(store.state);
+      const nowMemo = subscrib(store.state);
 
       let isNeedUpdate = false;
 
@@ -91,7 +91,7 @@ export function createStateManager<S>(initalState: S) {
     };
 
     public render() {
-      return this.props.children(this.lastMemo, store.state);
+      return this.props.children(...this.lastMemo);
     }
 
     public shouldComponentUpdate = () => {

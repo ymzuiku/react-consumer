@@ -2,23 +2,33 @@ import * as React from 'react';
 import { IHistory } from './createHistory';
 export interface IRouteProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     component?: any;
-    display?: string;
     keep?: boolean;
+    leaveTime?: number;
+    loadTime?: number;
     path: string;
-    sync?: 'sync' | 'async' | 'preload' | string;
 }
+/**
+ *  Route 使用 history.listen 而不使用 consumer 是因为 Route 属于非常固定的模式.
+ *  Route 会常驻 ReactNode 对象树，使用 listen 可以有效减少不必要的 consumer 订阅。
+ */
 export declare function createRoute<S>(store: any, history: IHistory): {
     new (props: IRouteProps): {
-        haveChild: boolean;
+        animeTimer: any;
+        realChild: any;
         state: {
-            display: string;
+            isRenderChild: any;
             realChild: any;
-            isRenderChild: boolean;
+            style: {
+                display: string;
+                position: string;
+                zIndex: number;
+            };
         };
-        hiddenChild: () => void;
+        unListen: () => any;
+        componentDidMount(): void;
+        componentWillUnmount(): void;
         onHistoryUpdate: () => void;
         render(): JSX.Element;
-        showChild: () => void;
         context: any;
         setState<K extends never>(state: {} | ((prevState: Readonly<{}>, props: Readonly<IRouteProps>) => {} | Pick<{}, K>) | Pick<{}, K>, callback?: () => void): void;
         forceUpdate(callBack?: () => void): void;
@@ -28,9 +38,7 @@ export declare function createRoute<S>(store: any, history: IHistory): {
         refs: {
             [key: string]: React.ReactInstance;
         };
-        componentDidMount?(): void;
         shouldComponentUpdate?(nextProps: Readonly<IRouteProps>, nextState: Readonly<{}>, nextContext: any): boolean;
-        componentWillUnmount?(): void;
         componentDidCatch?(error: Error, errorInfo: React.ErrorInfo): void;
         getSnapshotBeforeUpdate?(prevProps: Readonly<IRouteProps>, prevState: Readonly<{}>): any;
         componentDidUpdate?(prevProps: Readonly<IRouteProps>, prevState: Readonly<{}>, snapshot?: any): void;
@@ -42,9 +50,9 @@ export declare function createRoute<S>(store: any, history: IHistory): {
         UNSAFE_componentWillUpdate?(nextProps: Readonly<IRouteProps>, nextState: Readonly<{}>, nextContext: any): void;
     };
     defaultProps: {
-        display: string;
         sync: string;
         keep: boolean;
+        animeTime: number;
     };
     contextType?: React.Context<any>;
 };

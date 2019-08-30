@@ -1,6 +1,6 @@
+import { Consumer, Route, routeMap, store } from 'controller';
 import * as React from 'react';
 import { FixedSizeList as List } from 'react-window';
-import { Consumer, history, Route, store } from 'store';
 
 import * as dispatchs from '../dispatchs';
 
@@ -12,8 +12,8 @@ export interface IRow {
 const Row = ({ index, style }: IRow) => {
   return (
     <div style={style}>
-      <Consumer memo={st => [st.user.infinite[index]]}>
-        {([id]) => <div> Row {id}</div>}
+      <Consumer subscrib={s => [s.user.infinite[index]]}>
+        {id => <div> Row {id}</div>}
       </Consumer>
       <button onClick={() => dispatchs.changeInfiniteIndex(index)}>
         change this {index}
@@ -24,24 +24,24 @@ const Row = ({ index, style }: IRow) => {
 
 export const InfiniteList: React.FC = () => {
   return (
-    <div>
+    <div style={{ background: '#fff' }}>
       <header>
         <h3>Infinite Page</h3>
-        <Consumer memo={st => [st.paths]}>
-          {([paths]) => <h4>Route: {JSON.stringify(paths)} </h4>}
+        <Consumer subscrib={s => [s.paths]}>
+          {paths => <h4>Route: {JSON.stringify(paths)} </h4>}
         </Consumer>
-        <Consumer memo={st => [st.status['/InfiniteList']]}>
-          {([param]) => <h4>Param: {JSON.stringify(param)} </h4>}
+        <Consumer subscrib={s => [s.status['/InfiniteList']]}>
+          {param => <h4>Param: {JSON.stringify(param)} </h4>}
         </Consumer>
         <button
           onClick={() =>
-            history.replace('/InfiniteList', { dog: Math.random() })
+            routeMap.replace('/InfiniteList', { dog: Math.random() })
           }
         >
           Replace params
         </button>
-        <button onClick={() => history.pop()}>Go Back</button>
-        <button onClick={() => history.pop(0)}>Go Root Page</button>
+        <button onClick={() => routeMap.pop()}>Go Back</button>
+        <button onClick={() => routeMap.pop(0)}>Go Root Page</button>
         <Route path="/infinite-list/aaa">
           <h5>sub-route</h5>
         </Route>

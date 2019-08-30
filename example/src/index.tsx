@@ -2,11 +2,11 @@ import { cssin } from 'cssin';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Route, routeMap } from './controller';
 import { App } from './pages/App';
 import { InfiniteList } from './pages/InfiniteList';
 import { User } from './pages/User';
 import * as serviceWorker from './serviceWorker';
-import { history, Route } from './store';
 
 cssin`
 body {
@@ -41,15 +41,15 @@ button:active {
 
 const Root: React.FC = () => {
   React.useEffect(() => {
-    history.init('/App');
+    routeMap.init('/App');
   }, []);
 
   return (
-    <>
+    <div style={{ width: '100vw', height: '100vh' }}>
       <Route path="/App" component={App} />
       <Route path="/User" component={User} />
       <Route path="/InfiniteList" component={InfiniteList} />
-    </>
+    </div>
   );
 };
 

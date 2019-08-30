@@ -1,13 +1,13 @@
-import { store } from './store';
+import { store } from './controller';
 
 export const addNumber = () => {
-  store.update((state) => {
+  store.update(state => {
     state.user.info.num += 1;
   });
 };
 
 export const changeInfiniteIndex = (index: number) => {
-  store.update((state) => {
+  store.update(state => {
     state.user.infinite[index] = Math.random().toString();
   });
 };

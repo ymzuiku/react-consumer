@@ -5,16 +5,22 @@ import { IRouteProps } from './createRoute';
 export declare function bindRouteManager<S>(store: any): {
     Route: {
         new (props: IRouteProps): {
-            haveChild: boolean;
+            animeTimer: any;
+            realChild: any;
             state: {
-                display: string;
+                isRenderChild: any;
                 realChild: any;
-                isRenderChild: boolean;
+                style: {
+                    display: string;
+                    position: string;
+                    zIndex: number;
+                };
             };
-            hiddenChild: () => void;
+            unListen: () => any;
+            componentDidMount(): void;
+            componentWillUnmount(): void;
             onHistoryUpdate: () => void;
             render(): JSX.Element;
-            showChild: () => void;
             context: any;
             setState<K extends never>(state: {} | ((prevState: Readonly<{}>, props: Readonly<IRouteProps>) => {} | Pick<{}, K>) | Pick<{}, K>, callback?: () => void): void;
             forceUpdate(callBack?: () => void): void;
@@ -24,9 +30,7 @@ export declare function bindRouteManager<S>(store: any): {
             refs: {
                 [key: string]: import("react").ReactInstance;
             };
-            componentDidMount?(): void;
             shouldComponentUpdate?(nextProps: Readonly<IRouteProps>, nextState: Readonly<{}>, nextContext: any): boolean;
-            componentWillUnmount?(): void;
             componentDidCatch?(error: Error, errorInfo: import("react").ErrorInfo): void;
             getSnapshotBeforeUpdate?(prevProps: Readonly<IRouteProps>, prevState: Readonly<{}>): any;
             componentDidUpdate?(prevProps: Readonly<IRouteProps>, prevState: Readonly<{}>, snapshot?: any): void;
@@ -38,11 +42,11 @@ export declare function bindRouteManager<S>(store: any): {
             UNSAFE_componentWillUpdate?(nextProps: Readonly<IRouteProps>, nextState: Readonly<{}>, nextContext: any): void;
         };
         defaultProps: {
-            display: string;
             sync: string;
             keep: boolean;
+            animeTime: number;
         };
         contextType?: import("react").Context<any>;
     };
-    history: import("./createHistory").IHistory;
+    routeMap: import("./createHistory").IHistory;
 };

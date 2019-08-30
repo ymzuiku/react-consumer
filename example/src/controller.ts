@@ -22,9 +22,9 @@ const initState = {
 };
 
 const { Consumer, store } = createStateManager(initState);
-const { Route, history } = bindRouteManager(store);
+const { Route, routeMap } = bindRouteManager(store);
 
-export { Consumer, store, Route, history };
+export { Consumer, store, Route, routeMap };
 
 if (process.env.NODE_ENV === 'development') {
   const w = window as any;

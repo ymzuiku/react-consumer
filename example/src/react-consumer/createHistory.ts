@@ -16,10 +16,18 @@ type IDispatchInitHistory = (
 export interface IHistory {
   /** 重新初始化路由 */
   init: IDispatchInitHistory;
-  /** 获取某个path的状态 */
-  checkPathMatch(path: string, paths: string[]): [boolean, boolean, number];
-  /** 为history的变化添加监听 */
-  listen(fn: IHistoryListenFn): void;
+  /** 获取某个path的状态 [是否当前页，是否在栈中，是否次页，栈的编号] */
+  checkUrlMatch(
+    path: string
+  ): {
+    index: number;
+    lastPage: boolean;
+    match: boolean;
+    stackMatch: boolean;
+  };
+  checkUrlsStaskTop(path: string, paths: string[]): boolean;
+  /** 为history的变化添加监听, 返回值是注销函数 */
+  listen(fn: IHistoryListenFn): () => any;
   /** 移走一个路由或者去到指定路径的路由，并且更新视图 */
   pop(index?: any, stopBack?: boolean): void;
   /** 推进一个新的路由，并且更新 AppState */
@@ -68,32 +76,47 @@ export const createHistory = (store: any): IHistory => {
     return match;
   };
 
-  const cacheCheckPathMatch = new Map();
-
-  const checkPathMatch = (path: string): [boolean, boolean, number] => {
+  const checkUrlMatch = (
+    path: string
+  ): {
+    index: number;
+    lastPage: boolean;
+    match: boolean;
+    stackMatch: boolean;
+  } => {
     const paths = store.state.paths;
-    const key = `${path}:${paths.join(',')}`;
-    if (cacheCheckPathMatch.has(key)) {
-      return cacheCheckPathMatch.get(key);
-    }
     let stackMatch = false;
-    let zIndex = 0;
+    let index = -1;
 
     // 计算历史路径是否有匹配
-    for (let i = 0; i < paths.length; i++) {
+    for (let i = paths.length - 1; i >= 0; i--) {
       const subMatch = getMatch(path, paths[i]);
       if (subMatch) {
-        zIndex = i;
+        index = i;
         stackMatch = true;
+        break;
       }
     }
 
     const match = getMatch(path, paths[paths.length - 1]);
+    const lastPage = getMatch(path, paths[paths.length - 2]);
 
-    const out = [match, stackMatch, zIndex];
-    cacheCheckPathMatch.set(key, out);
+    return {
+      match,
+      stackMatch,
+      lastPage,
+      index,
+    };
+  };
 
-    return out as any;
+  const checkUrlsStaskTop = (path: string, paths: string[]): boolean => {
+    const index = checkUrlMatch(path).index;
+    const indexs = paths.map(v => {
+      return checkUrlMatch(v).index;
+    });
+    const sorts = [...indexs].sort((a, b) => b - a);
+
+    return index === sorts[0];
   };
 
   let space = '';
@@ -111,11 +134,15 @@ export const createHistory = (store: any): IHistory => {
     return [window.location.pathname, window.location.search || ''];
   };
 
-  const historyListenFns: IHistoryListenFn[] = [];
+  const historyListenFns = new Set<IHistoryListenFn>();
 
   /** 为history的变化添加监听，如果监听函数返回不是 true，则拦截此次的路由变化 */
   const historyListen = (fn: IHistoryListenFn) => {
-    historyListenFns.push(fn);
+    historyListenFns.add(fn);
+
+    return () => {
+      historyListenFns.delete(fn);
+    };
   };
 
   /** 校验路由变化是否被拦截 */
@@ -123,9 +150,9 @@ export const createHistory = (store: any): IHistory => {
     nextPath: string,
     historic?: { [key: string]: any }
   ) => {
-    for (const fn of historyListenFns) {
+    historyListenFns.forEach(fn => {
       fn(nextPath, historic, store.state);
-    }
+    });
   };
 
   /**  替换当前路由状态 */
@@ -196,7 +223,7 @@ export const createHistory = (store: any): IHistory => {
         if (!stopBack) {
           window.history.back();
         }
-        state.history[path] = {};
+        state.history[realState.paths[_index]] = {};
         state.paths.pop();
       }
     });
@@ -222,7 +249,7 @@ export const createHistory = (store: any): IHistory => {
         } else {
           const [path, search] = getHref();
           dispatchHistoryPush(
-            path!,
+            path,
             search !== '' ? queryString.parse(search) : undefined,
             true
           );
@@ -260,13 +287,17 @@ export const createHistory = (store: any): IHistory => {
       dispatchHistoryPush(def, queryString.parse(search));
     } else {
       dispatchHistoryPush(def);
-      dispatchHistoryPush(path, queryString.parse(search));
+      setTimeout(() => {
+        dispatchHistoryPush(path, queryString.parse(search));
+      });
     }
   }
 
   return {
     /** 获取某个path的状态 */
-    checkPathMatch,
+    checkUrlMatch,
+    /** 计算多个url，得到相对的 stackTop */
+    checkUrlsStaskTop,
     /** 重新初始化路由 */
     init: dispatchInitHistory,
     /** 为history的变化添加监听 */
