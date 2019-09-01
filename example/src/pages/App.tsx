@@ -7,10 +7,10 @@ export const App: React.FC = () => {
     <div style={{ background: '#fff' }}>
       <header>
         <h3>App Page</h3>
-        <Consumer subscrib={s => [s.paths]}>
+        <Consumer subscribe={s => [s.paths]}>
           {paths => <h4>Route: {JSON.stringify(paths)} </h4>}
         </Consumer>
-        <Consumer subscrib={s => [s.status['/App']]}>
+        <Consumer subscribe={s => [s.status['/App']]}>
           {param => <h4>Param: {JSON.stringify(param)} </h4>}
         </Consumer>
         <button onClick={dispatchs.addNumber}>add number</button>
@@ -26,7 +26,7 @@ export const App: React.FC = () => {
         </button>
       </header>
       <section>
-        <Consumer subscrib={s => [s.user.info.num]}>
+        <Consumer subscribe={s => [s.user.info.num]}>
           {num => <div>get:{num}</div>}
         </Consumer>
       </section>

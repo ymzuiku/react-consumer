@@ -12,7 +12,7 @@ export interface IRow {
 const Row = ({ index, style }: IRow) => {
   return (
     <div style={style}>
-      <Consumer subscrib={s => [s.user.infinite[index]]}>
+      <Consumer subscribe={s => [s.user.infinite[index]]}>
         {id => <div> Row {id}</div>}
       </Consumer>
       <button onClick={() => dispatchs.changeInfiniteIndex(index)}>
@@ -27,10 +27,10 @@ export const InfiniteList: React.FC = () => {
     <div style={{ background: '#fff' }}>
       <header>
         <h3>Infinite Page</h3>
-        <Consumer subscrib={s => [s.paths]}>
+        <Consumer subscribe={s => [s.paths]}>
           {paths => <h4>Route: {JSON.stringify(paths)} </h4>}
         </Consumer>
-        <Consumer subscrib={s => [s.status['/InfiniteList']]}>
+        <Consumer subscribe={s => [s.status['/InfiniteList']]}>
           {param => <h4>Param: {JSON.stringify(param)} </h4>}
         </Consumer>
         <button

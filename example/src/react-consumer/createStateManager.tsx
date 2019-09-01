@@ -9,7 +9,7 @@ export interface IConsumerProps<S> {
   /* children */
   children(...memo: any): any;
   /* 订阅需要更新的对象 在 props */
-  subscrib(state: S): any[];
+  subscribe(state: S): any[];
 }
 
 /**
@@ -51,10 +51,10 @@ export function createStateManager<S>(initalState: S) {
     public unListen: () => void;
     public constructor(props: IConsumerProps<S>) {
       super(props);
-      if (this.props.subscrib === undefined) {
+      if (this.props.subscribe === undefined) {
         throw new Error('<Consumer /> need "subscrib" props');
       }
-      this.lastMemo = [...this.props.subscrib(store.state)];
+      this.lastMemo = [...this.props.subscribe(store.state)];
 
       this.unListen = listen(this.handleListen);
     }
@@ -67,7 +67,7 @@ export function createStateManager<S>(initalState: S) {
     }
 
     public handleListen = (state: S) => {
-      const { beforeUpdate, subscrib } = this.props;
+      const { beforeUpdate, subscribe: subscrib } = this.props;
 
       const nowMemo = subscrib(store.state);
 

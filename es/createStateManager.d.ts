@@ -3,7 +3,7 @@ export interface IConsumerProps<S> {
     beforeUnmount?(memo: any[]): any;
     beforeUpdate?(memo: any[]): any;
     children(...memo: any): any;
-    subscrib(state: S): any[];
+    subscribe(state: S): any[];
 }
 /**
  * 实例化 {store, Consumer}

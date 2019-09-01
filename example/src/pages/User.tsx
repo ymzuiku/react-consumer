@@ -7,10 +7,10 @@ export const User: React.FC = () => {
     <div style={{ background: '#fff' }}>
       <header>
         <h3>User Page</h3>
-        <Consumer subscrib={s => [s.paths]}>
+        <Consumer subscribe={s => [s.paths]}>
           {([paths]) => <h3>Route: {JSON.stringify(paths)} </h3>}
         </Consumer>
-        <Consumer subscrib={s => [s.status['/User']]}>
+        <Consumer subscribe={s => [s.status['/User']]}>
           {param => <h4>Param: {JSON.stringify(param)} </h4>}
         </Consumer>
         <button onClick={dispatchs.addNumber}>add number</button>
@@ -20,7 +20,7 @@ export const User: React.FC = () => {
         <button onClick={() => routeMap.pop()}>Go Back</button>
       </header>
       <section>
-        <Consumer subscrib={s => [s.user.info.num]}>
+        <Consumer subscribe={s => [s.user.info.num]}>
           {num => <div>{num}</div>}
         </Consumer>
       </section>

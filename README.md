@@ -63,12 +63,12 @@ export function dispatchOfAddNum() {
 
 Consumer API
 
-| props         | 类型                                  | 描述                                                                   |
-| ------------- | ------------------------------------- | ---------------------------------------------------------------------- |
-| subscrib      | `(state) => any[]`                    | 返回一个数组对象, 只有当数组对象变更了, 才会更新组件                   |
-| beforeUnmount | `(...subscribDatas) => void`          | 当组件将要销毁之前的回调                                               |
-| beforeUpdate  | `(...subscribDatas) => void`          | 当组件将要更新之前的回调                                               |
-| children      | `(...subscribDatas) => React.Element` | Consumer 的子组件是一个函数(renderProps), 函数参数是 memo 对象和 state |
+| props         | 类型                                   | 描述                                                                   |
+| ------------- | -------------------------------------- | ---------------------------------------------------------------------- |
+| subscribe     | `(state) => any[]`                     | 返回一个数组对象, 只有当数组对象变更了, 才会更新组件                   |
+| beforeUnmount | `(...subscribeDatas) => void`          | 当组件将要销毁之前的回调                                               |
+| beforeUpdate  | `(...subscribeDatas) => void`          | 当组件将要更新之前的回调                                               |
+| children      | `(...subscribeDatas) => React.Element` | Consumer 的子组件是一个函数(renderProps), 函数参数是 memo 对象和 state |
 
 示例：
 
@@ -81,7 +81,7 @@ function Page() {
   return (
     <div className="app">
       <p>最简单的例子</p>
-      <Consumer subscrib={state => [state.user.info.num]}>
+      <Consumer subscribe={state => [state.user.info.num]}>
         {num => <h2>{num}</h2>}
       </Consumer>
       <button onClick={dispatchs.dispatchOfAddNum}>点击仅重绘number</button>
