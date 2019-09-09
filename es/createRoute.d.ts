@@ -2,9 +2,9 @@ import * as React from 'react';
 import { IHistory } from './createHistory';
 export interface IRouteProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     component?: any;
+    delay?: number;
     keep?: boolean;
     leaveTime?: number;
-    loadTime?: number;
     path: string;
 }
 /**

@@ -12,15 +12,19 @@ const SHOW_POSIRION = 'relative';
 const SHOW_POINTEREVENTS = 'auto';
 const HIDDEN_POINTEREVENTS = 'none';
 
-export interface IRouteProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+export interface IRouteProps
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+  > {
   /* component 可以是组件对象，也可以是 import() 函数, 其中 import() 函数需要配合 delay 实现 */
   component?: any;
-  /* 等待若干毫秒，异步读取组件，若未定义，则同步读取组件; 如果路由提前切换到目标组件，会忽略延迟加载，直接开始异步 */
-  delay?: number;
   /* 如果历史路由中包含path，使用 div包裹子组件，并设置 dispatch=none 代替 return null */
   keep?: boolean;
   /* 预留给页面跳转的时间，等待若干毫秒，才将当前画面设置为 display: none */
   leaveTime?: number;
+  /* 等待若干毫秒，异步读取组件，若未定义，则同步读取组件; 如果路由提前切换到目标组件，会忽略延迟加载，直接开始异步 */
+  delay?: number;
   /* 用于校验路由的路径 */
   path: string;
 }
@@ -50,14 +54,14 @@ export function createRoute<S>(store: any, history: IHistory) {
     public unListen: () => any = null as any;
     public constructor(props: IRouteProps) {
       super(props);
-      const { delay: delay, component: Comp } = this.props;
+      const { delay: loadTime, component: Comp } = this.props;
       // 预先加载
-      if (delay !== undefined && delay !== 0) {
+      if (loadTime !== undefined && loadTime !== 0) {
         setTimeout(() => {
           if (!this.state.realChild) {
             Comp();
           }
-        }, delay);
+        }, loadTime);
       }
     }
 
@@ -74,14 +78,14 @@ export function createRoute<S>(store: any, history: IHistory) {
     }
 
     public onHistoryUpdate = () => {
-      const { path, delay: delay, component: Comp, keep, leaveTime } = this.props;
+      const { path, delay: loadTime, component: Comp, keep, leaveTime } = this.props;
       const { isRenderChild } = this.state;
       const { match, stackMatch, lastPage } = history.checkUrlMatch(path);
 
       if (match) {
         // 如果没有 child, 先读取，再重新执行
         if (!this.realChild) {
-          if (delay === undefined) {
+          if (loadTime === undefined) {
             this.realChild = <Comp />;
             this.onHistoryUpdate();
           } else {

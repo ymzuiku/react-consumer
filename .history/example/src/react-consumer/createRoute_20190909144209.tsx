@@ -50,14 +50,14 @@ export function createRoute<S>(store: any, history: IHistory) {
     public unListen: () => any = null as any;
     public constructor(props: IRouteProps) {
       super(props);
-      const { delay: delay, component: Comp } = this.props;
+      const { delay: loadTime, component: Comp } = this.props;
       // 预先加载
-      if (delay !== undefined && delay !== 0) {
+      if (loadTime !== undefined && loadTime !== 0) {
         setTimeout(() => {
           if (!this.state.realChild) {
             Comp();
           }
-        }, delay);
+        }, loadTime);
       }
     }
 
@@ -74,14 +74,14 @@ export function createRoute<S>(store: any, history: IHistory) {
     }
 
     public onHistoryUpdate = () => {
-      const { path, delay: delay, component: Comp, keep, leaveTime } = this.props;
+      const { path, delay: loadTime, component: Comp, keep, leaveTime } = this.props;
       const { isRenderChild } = this.state;
       const { match, stackMatch, lastPage } = history.checkUrlMatch(path);
 
       if (match) {
         // 如果没有 child, 先读取，再重新执行
         if (!this.realChild) {
-          if (delay === undefined) {
+          if (loadTime === undefined) {
             this.realChild = <Comp />;
             this.onHistoryUpdate();
           } else {
