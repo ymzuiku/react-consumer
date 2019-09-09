@@ -5,5 +5,5 @@ it('test add', () => {
   dispatchs.addNumber();
   dispatchs.addNumber();
   dispatchs.addNumber();
-  expect(store.state.user.info.num).toBe(3);
+  expect(store.getState().user.info.num).toBe(3);
 });

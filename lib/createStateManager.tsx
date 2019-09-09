@@ -28,20 +28,22 @@ export function createStateManager<S>(initalState: S) {
     };
   };
 
+  let state = initalState as any;
+
   const store = {
     /* 订阅 */
     listen,
     /* 全局状态 */
-    state: initalState,
+    getState: () => state,
     /* 订阅列表 */
     subscribes,
     /* 更新全局状态，及发布视图更新 */
     update: (fn: (state: S) => void) => {
-      store.state = produce(store.state, (draft: S) => fn(draft));
+      state = produce(store.getState(), (draft: S) => fn(draft));
 
       subscribes.forEach(value => {
         const sub = value as (state: S) => any;
-        sub(store.state);
+        sub(state);
       });
     },
   };
@@ -54,7 +56,7 @@ export function createStateManager<S>(initalState: S) {
       if (this.props.subscribe === undefined) {
         throw new Error('<Consumer /> need "subscrib" props');
       }
-      this.lastMemo = [...this.props.subscribe(store.state)];
+      this.lastMemo = [...this.props.subscribe(store.getState())];
 
       this.unListen = listen(this.handleListen);
     }
@@ -66,10 +68,10 @@ export function createStateManager<S>(initalState: S) {
       }
     }
 
-    public handleListen = (state: S) => {
+    public handleListen = (s: S) => {
       const { beforeUpdate, subscribe: subscrib } = this.props;
 
-      const nowMemo = subscrib(store.state);
+      const nowMemo = subscrib(store.getState());
 
       let isNeedUpdate = false;
 

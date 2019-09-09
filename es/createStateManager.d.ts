@@ -11,7 +11,7 @@ export interface IConsumerProps<S> {
 export declare function createStateManager<S>(initalState: S): {
     store: {
         listen: (fn: (state: S) => any) => () => void;
-        state: S;
+        getState: () => any;
         subscribes: Set<unknown>;
         update: (fn: (state: S) => void) => void;
     };
@@ -20,7 +20,7 @@ export declare function createStateManager<S>(initalState: S): {
             lastMemo: any[];
             unListen: () => void;
             componentWillUnmount(): void;
-            handleListen: (state: S) => void;
+            handleListen: (s: S) => void;
             render(): any;
             shouldComponentUpdate: () => boolean;
             context: any;

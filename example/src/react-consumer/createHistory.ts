@@ -1,17 +1,9 @@
 import * as queryString from 'querystring-number';
 
-type IHistoryListenFn = (
-  nextPath: string,
-  historic: object | undefined,
-  state: any
-) => void;
+type IHistoryListenFn = (nextPath: string, historic: object | undefined, state: any) => void;
 
 /** 根据浏览器访问的URL初始化路径 */
-type IDispatchInitHistory = (
-  def: string,
-  keepHistory?: boolean,
-  hashSpace?: string
-) => void;
+type IDispatchInitHistory = (def: string, keepHistory?: boolean, hashSpace?: string) => void;
 
 export interface IHistory {
   /** 重新初始化路由 */
@@ -84,7 +76,7 @@ export const createHistory = (store: any): IHistory => {
     match: boolean;
     stackMatch: boolean;
   } => {
-    const paths = store.state.paths;
+    const paths = store.getState().paths;
     let stackMatch = false;
     let index = -1;
 
@@ -146,21 +138,15 @@ export const createHistory = (store: any): IHistory => {
   };
 
   /** 校验路由变化是否被拦截 */
-  const historyListenFnsChecker = (
-    nextPath: string,
-    historic?: { [key: string]: any }
-  ) => {
+  const historyListenFnsChecker = (nextPath: string, historic?: { [key: string]: any }) => {
     historyListenFns.forEach(fn => {
-      fn(nextPath, historic, store.state);
+      fn(nextPath, historic, store.getState());
     });
   };
 
   /**  替换当前路由状态 */
-  const dispatcHistoryReplace = (
-    path: string,
-    historic?: { [key: string]: any }
-  ) => {
-    const realState = store.state;
+  const dispatcHistoryReplace = (path: string, historic?: { [key: string]: any }) => {
+    const realState = store.getState();
     const thePath = path || realState.paths[realState.paths.length - 1];
 
     store.update((state: any) => {
@@ -171,11 +157,7 @@ export const createHistory = (store: any): IHistory => {
       if (typeof window !== 'undefined') {
         const query = queryString.stringify(nextHistoric);
 
-        window.history.replaceState(
-          null,
-          `${space}${thePath}`,
-          query === '' ? `${space}${thePath}` : `${space}${thePath}?${query}`
-        );
+        window.history.replaceState(null, `${space}${thePath}`, query === '' ? `${space}${thePath}` : `${space}${thePath}?${query}`);
       }
     });
 
@@ -183,12 +165,8 @@ export const createHistory = (store: any): IHistory => {
   };
 
   /** 推进一个新的路由，并且更新 AppState */
-  const dispatchHistoryPush = (
-    path: string,
-    historic?: { [key: string]: any },
-    stopPush?: boolean
-  ) => {
-    if (path === store.state.paths[store.state.paths.length - 1]) {
+  const dispatchHistoryPush = (path: string, historic?: { [key: string]: any }, stopPush?: boolean) => {
+    if (path === store.getState().paths[store.getState().paths.length - 1]) {
       return;
     }
     store.update((state: any) => {
@@ -197,11 +175,7 @@ export const createHistory = (store: any): IHistory => {
       state.history[path] = nextHistoric;
       if (typeof window !== 'undefined' && !stopPush && !isKeepHistory) {
         const query = queryString.stringify(nextHistoric);
-        window.history.pushState(
-          null,
-          `${space}${path}`,
-          query === '' ? `${space}${path}` : `${space}${path}?${query}`
-        );
+        window.history.pushState(null, `${space}${path}`, query === '' ? `${space}${path}` : `${space}${path}?${query}`);
       }
     });
 
@@ -210,10 +184,9 @@ export const createHistory = (store: any): IHistory => {
 
   /** 移走一个路由或者去到指定路径的路由，并且更新视图 */
   const dispatchHistoryPop = (index?: number | any, stopBack?: boolean) => {
-    const realState = store.state;
+    const realState = store.getState();
 
-    const _index =
-      typeof index === 'number' ? index : realState.paths.length - 1;
+    const _index = typeof index === 'number' ? index : realState.paths.length - 1;
 
     const path = realState.paths[_index - 1];
     const historic = realState.history[path];
@@ -233,7 +206,7 @@ export const createHistory = (store: any): IHistory => {
 
   if (typeof window !== 'undefined') {
     const onPopState = () => {
-      const realState = store.state;
+      const realState = store.getState();
 
       const paths = realState.paths;
 
@@ -248,11 +221,7 @@ export const createHistory = (store: any): IHistory => {
           dispatchHistoryPop(undefined, true);
         } else {
           const [path, search] = getHref();
-          dispatchHistoryPush(
-            path,
-            search !== '' ? queryString.parse(search) : undefined,
-            true
-          );
+          dispatchHistoryPush(path, search !== '' ? queryString.parse(search) : undefined, true);
         }
       } else {
         historyListenFnsChecker(getHref()[0], undefined);
@@ -263,11 +232,7 @@ export const createHistory = (store: any): IHistory => {
   }
 
   /** 根据浏览器访问的URL初始化路径 */
-  function dispatchInitHistory(
-    def: string,
-    keepHistory?: boolean,
-    hashSpace = '#'
-  ) {
+  function dispatchInitHistory(def: string, keepHistory?: boolean, hashSpace = '#') {
     isKeepHistory = keepHistory || false;
 
     space = hashSpace;

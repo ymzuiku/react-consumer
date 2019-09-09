@@ -48,7 +48,7 @@ action，reducer 都不需要编写，immutable 也不需要现示的编写，�
 整个项目的状态都编写在一个个 dispatch 中
 
 ```js
-import { store } from './controller';
+import { store } from './store';
 
 export function dispatchOfAddNum() {
   // 在任何异步结束之后，处理状态更新
@@ -75,15 +75,13 @@ Consumer API
 ```js
 import React from 'react';
 import * as dispatchs from './dispatchs';
-import { Consumer } from './controller';
+import { Consumer } from './store';
 
 function Page() {
   return (
     <div className="app">
       <p>最简单的例子</p>
-      <Consumer subscribe={state => [state.user.info.num]}>
-        {num => <h2>{num}</h2>}
-      </Consumer>
+      <Consumer subscribe={state => [state.user.info.num]}>{num => <h2>{num}</h2>}</Consumer>
       <button onClick={dispatchs.dispatchOfAddNum}>点击仅重绘number</button>
     </div>
   );
@@ -112,13 +110,13 @@ export default Page;
 
 ```js
 import { dispatchOfAddNum } from '../src/dispatchs';
-import controller from '../src/controller';
+import { store } from '../src/store';
 
 test('add card', async () => {
   await dispatchOfAddNum(10);
 
   // 当函dispatch执行完成，我们检查一下 store 是否和我们预期的值一致即可
-  expect(controller.state.user.info.num).toBe(10);
+  expect(store.getState().user.info.num).toBe(10);
 });
 ```
 

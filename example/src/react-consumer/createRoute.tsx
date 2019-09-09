@@ -29,7 +29,7 @@ export interface IRouteProps extends React.DetailedHTMLProps<React.HTMLAttribute
  *  Route 使用 history.listen 而不使用 consumer 是因为 Route 属于非常固定的模式.
  *  Route 会常驻 ReactNode 对象树，使用 listen 可以有效减少不必要的 consumer 订阅。
  */
-export function createRoute<S>(store: any, history: IHistory) {
+export function createRoute<S>(history: IHistory) {
   return class Route extends React.Component<IRouteProps> {
     public static defaultProps = {
       sync: 'sync',
@@ -50,7 +50,7 @@ export function createRoute<S>(store: any, history: IHistory) {
     public unListen: () => any = null as any;
     public constructor(props: IRouteProps) {
       super(props);
-      const { delay: delay, component: Comp } = this.props;
+      const { delay, component: Comp } = this.props;
       // 预先加载
       if (delay !== undefined && delay !== 0) {
         setTimeout(() => {
@@ -74,7 +74,7 @@ export function createRoute<S>(store: any, history: IHistory) {
     }
 
     public onHistoryUpdate = () => {
-      const { path, delay: delay, component: Comp, keep, leaveTime } = this.props;
+      const { path, delay, component: Comp, keep, leaveTime } = this.props;
       const { isRenderChild } = this.state;
       const { match, stackMatch, lastPage } = history.checkUrlMatch(path);
 

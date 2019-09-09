@@ -8,7 +8,7 @@ import { createRoute, IRouteProps } from './createRoute'; // eslint-disable-line
  */
 export function bindRouteManager<S>(store: any) {
   const routeMap = createHistory(store);
-  const Route = createRoute<S>(store, routeMap);
+  const Route = createRoute<S>(routeMap);
 
   return { Route, routeMap };
 }
