@@ -34,7 +34,7 @@ export function createStateManager<S>(initalState: S) {
     /* 订阅 */
     listen,
     /* 全局状态 */
-    getState: () => state,
+    getState: () => state as S,
     /* 订阅列表 */
     subscribes,
     /* 更新全局状态，及发布视图更新 */
