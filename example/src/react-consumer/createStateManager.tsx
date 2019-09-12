@@ -39,7 +39,7 @@ export function createStateManager<S>(initalState: S) {
     subscribes,
     /* 更新全局状态，及发布视图更新 */
     update: (fn: (state: S) => void) => {
-      state = produce(store.getState(), (draft: S) => fn(draft));
+      state = produce(store.getState(), (draft: S) => {fn(draft)});
 
       subscribes.forEach(value => {
         const sub = value as (state: S) => any;
