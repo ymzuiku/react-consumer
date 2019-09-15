@@ -8,6 +8,7 @@ export interface IConsumerProps<S> {
   beforeUpdate?(memo: any[]): any;
   /* children */
   children(...memo: any): any;
+  shouldComponentUpdate?(memo: any[]): any;
   /* 订阅需要更新的对象 在 props */
   subscribe(state: S): any[];
 }
@@ -39,7 +40,9 @@ export function createStateManager<S>(initalState: S) {
     subscribes,
     /* 更新全局状态，及发布视图更新 */
     update: (fn: (state: S) => void) => {
-      state = produce(store.getState(), (draft: S) => {fn(draft)});
+      state = produce(store.getState(), (draft: S) => {
+        fn(draft);
+      });
 
       subscribes.forEach(value => {
         const sub = value as (state: S) => any;
@@ -50,6 +53,9 @@ export function createStateManager<S>(initalState: S) {
 
   const Consumer = class extends React.Component<IConsumerProps<S>> {
     public lastMemo: any[] = [];
+    public state = {
+      num: 0,
+    };
     public unListen: () => void;
     public constructor(props: IConsumerProps<S>) {
       super(props);
@@ -88,7 +94,9 @@ export function createStateManager<S>(initalState: S) {
         if (beforeUpdate !== undefined) {
           beforeUpdate(nowMemo);
         }
-        this.forceUpdate();
+        this.setState(({ num }: { num: number }) => ({
+          num: num + 1,
+        }));
       }
     };
 
@@ -96,7 +104,14 @@ export function createStateManager<S>(initalState: S) {
       return this.props.children(...this.lastMemo);
     }
 
-    public shouldComponentUpdate = () => {
+    public shouldComponentUpdate = (nextProps: any, nextState: any) => {
+      if (nextState.num !== this.state.num) {
+        return true;
+      }
+      if (nextProps.scu) {
+        return nextProps.shouldComponentUpdate(this.lastMemo);
+      }
+
       return false;
     };
   };

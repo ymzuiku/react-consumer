@@ -3,6 +3,7 @@ export interface IConsumerProps<S> {
     beforeUnmount?(memo: any[]): any;
     beforeUpdate?(memo: any[]): any;
     children(...memo: any): any;
+    shouldComponentUpdate?(memo: any[]): any;
     subscribe(state: S): any[];
 }
 /**
@@ -18,18 +19,20 @@ export declare function createStateManager<S>(initalState: S): {
     Consumer: {
         new (props: IConsumerProps<S>): {
             lastMemo: any[];
+            state: {
+                num: number;
+            };
             unListen: () => void;
             componentWillUnmount(): void;
             handleListen: (s: S) => void;
             render(): any;
-            shouldComponentUpdate: () => boolean;
+            shouldComponentUpdate: (nextProps: any, nextState: any) => any;
             context: any;
             setState<K extends never>(state: {} | ((prevState: Readonly<{}>, props: Readonly<IConsumerProps<S>>) => {} | Pick<{}, K>) | Pick<{}, K>, callback?: () => void): void;
             forceUpdate(callBack?: () => void): void;
             readonly props: Readonly<IConsumerProps<S>> & Readonly<{
                 children?: React.ReactNode;
             }>;
-            state: Readonly<{}>;
             refs: {
                 [key: string]: React.ReactInstance;
             };
