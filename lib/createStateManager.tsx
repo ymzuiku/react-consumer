@@ -108,7 +108,7 @@ export function createStateManager<S>(initalState: S) {
       if (nextState.num !== this.state.num) {
         return true;
       }
-      if (nextProps.scu) {
+      if (nextProps.shouldComponentUpdate) {
         return nextProps.shouldComponentUpdate(this.lastMemo);
       }
 
