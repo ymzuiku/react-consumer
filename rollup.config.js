@@ -5,14 +5,24 @@ module.exports = [
   {
     input: './example/src/react-consumer/index.ts',
     output: {
-      file: './umd/react-consumer.umd.js',
+      file: './umd/index.js',
       format: 'umd',
       name: 'react-consumer',
       sourcemap: true,
     },
+    globals: {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+      immer: 'produce',
+    },
     plugins: [
       rollupTypescript({
-        useTsconfigDeclarationDir: true,
+        // tsconfigDefaults:{
+        //   compilerOptions: {
+        //     declaration:true,
+        //   }
+        // },
+        useTsconfigDeclarationDir: false,
       }),
       uglify({
         sourcemap: true,

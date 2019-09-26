@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -18,9 +18,10 @@
     "noEmit": true,
     "inlineSourceMap": false,
     "declaration": true,
-    "outDir": "./es",
-    "declarationDir": "./es",
+    "outDir": "./umd",
+    "declarationDir": "./",
     "jsx": "react"
   },
-  "include": ["./"]
+  "exclude": ["node_modules", "umd"],
+  "include": ["example"]
 }

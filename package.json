@@ -1,15 +1,15 @@
 {
   "name": "react-consumer",
-  "version": "1.5.0",
-  "main": "umd/react-consumer.umd.js",
-  "types": "umd/lib/index.ts",
+  "version": "1.5.1",
+  "main": "umd/index.js",
+  "types": "umd/react-consumer/index.d.ts",
   "files": [
     "umd"
   ],
   "license": "MIT",
   "scripts": {
-    "lib": "tscu example/src/react-consumer --outDir es --outLib lib",
-    "lib2": "rollup -c"
+    "lib-old": "tscu example/src/react-consumer --outDir es --outLib lib",
+    "lib": "rollup -c"
   },
   "dependencies": {
     "immer": "^4.0.0",
