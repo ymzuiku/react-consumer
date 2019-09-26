@@ -1,8 +1,8 @@
 {
   "name": "react-consumer",
-  "version": "1.4.2",
-  "main": "dist/react-consumer.umd.js",
-  "types": "dist/lib/index.ts",
+  "version": "1.5.0",
+  "main": "umd/react-consumer.umd.js",
+  "types": "umd/lib/index.ts",
   "files": [
     "umd"
   ],

@@ -3,9 +3,9 @@ const { uglify } = require('rollup-plugin-uglify');
 
 module.exports = [
   {
-    input: './lib/index.ts',
+    input: './example/src/react-consumer/index.ts',
     output: {
-      file: './es/react-consumer.umd.js',
+      file: './umd/react-consumer.umd.js',
       format: 'umd',
       name: 'react-consumer',
       sourcemap: true,
