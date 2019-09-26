@@ -1,14 +1,15 @@
 {
   "name": "react-consumer",
-  "version": "1.4.1",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "version": "1.4.2",
+  "main": "dist/react-consumer.umd.js",
+  "types": "dist/lib/index.ts",
   "files": [
     "umd"
   ],
   "license": "MIT",
   "scripts": {
-    "lib": "tscu example/src/react-consumer --outDir es --outLib lib"
+    "lib": "tscu example/src/react-consumer --outDir es --outLib lib",
+    "lib2": "rollup -c"
   },
   "dependencies": {
     "immer": "^4.0.0",
@@ -19,7 +20,14 @@
     "@types/node": "8.10.39",
     "@types/react": "16.8.19",
     "@types/react-dom": "16.8.4",
-    "tscu": "^1.3.2"
+    "gulp": "^4.0.2",
+    "gulp-uglify": "^3.0.2",
+    "rollup": "^1.21.4",
+    "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-typescript2": "^0.24.2",
+    "rollup-plugin-uglify": "^6.0.3",
+    "tscu": "^1.3.2",
+    "typescript": "^3.6.3"
   },
   "repository": {
     "type": "git",
