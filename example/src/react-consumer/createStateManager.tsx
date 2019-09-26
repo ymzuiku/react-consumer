@@ -2,14 +2,15 @@ import produce from 'immer';
 import * as React from 'react';
 
 export interface IConsumerProps<S> {
+  memo?: any[];
   /* beforeUnmount */
-  beforeUnmount?(memo: any[]): any;
+  beforeUnmount?(subscribeData: any[]): any;
   /* beforeUpdate */
-  beforeUpdate?(memo: any[]): any;
+  beforeUpdate?(subscribeData: any[]): any;
   /* children */
-  children(...memo: any): any;
+  children(...subscribeData: any): any;
   /* 订阅需要更新的对象 在 props */
-  subscribe(state: S): any[];
+  subscribe?(state: S): any[];
 }
 
 /**
@@ -39,7 +40,9 @@ export function createStateManager<S>(initalState: S) {
     subscribes,
     /* 更新全局状态，及发布视图更新 */
     update: (fn: (state: S) => void) => {
-      state = produce(store.getState(), (draft: S) => {fn(draft)});
+      state = produce(store.getState(), (draft: S) => {
+        fn(draft);
+      });
 
       subscribes.forEach(value => {
         const sub = value as (state: S) => any;
@@ -49,54 +52,78 @@ export function createStateManager<S>(initalState: S) {
   };
 
   const Consumer = class extends React.Component<IConsumerProps<S>> {
-    public lastMemo: any[] = [];
-    public unListen: () => void;
+    public lastData: any[] = [];
+    public state = {
+      num: 0,
+    };
+    public unListen = null as any;
     public constructor(props: IConsumerProps<S>) {
       super(props);
-      if (this.props.subscribe === undefined) {
-        throw new Error('<Consumer /> need "subscrib" props');
-      }
-      this.lastMemo = [...this.props.subscribe(store.getState())];
+      if (this.props.subscribe) {
+        this.lastData = [...this.props.subscribe(store.getState())];
 
-      this.unListen = listen(this.handleListen);
+        this.unListen = listen(this.handleListen);
+      }
     }
 
     public componentWillUnmount() {
-      this.unListen();
+      if (this.unListen) {
+        this.unListen();
+        this.unListen = null;
+      }
       if (this.props.beforeUnmount) {
-        this.props.beforeUnmount(this.lastMemo);
+        this.props.beforeUnmount(this.lastData);
       }
     }
 
     public handleListen = (s: S) => {
-      const { beforeUpdate, subscribe: subscrib } = this.props;
+      const { beforeUpdate, subscribe } = this.props;
 
-      const nowMemo = subscrib(store.getState());
+      const nowData = subscribe!(store.getState());
 
       let isNeedUpdate = false;
 
-      for (let i = 0; i < this.lastMemo.length; i++) {
-        if (this.lastMemo[i] !== nowMemo[i]) {
+      for (let i = 0; i < this.lastData.length; i++) {
+        if (this.lastData[i] !== nowData[i]) {
           isNeedUpdate = true;
           break;
         }
       }
 
-      this.lastMemo = [...nowMemo];
+      this.lastData = [...nowData];
 
       if (isNeedUpdate) {
         if (beforeUpdate !== undefined) {
-          beforeUpdate(nowMemo);
+          beforeUpdate(nowData);
         }
-        this.forceUpdate();
+        this.setState(({ num }: { num: number }) => ({
+          num: num > 900 ? 1 : num + 1,
+        }));
       }
     };
 
     public render() {
-      return this.props.children(...this.lastMemo);
+      return this.props.children(...this.lastData);
     }
 
-    public shouldComponentUpdate = () => {
+    public shouldComponentUpdate = (nextProps: any, nextState: any) => {
+      if (nextState.num !== this.state.num) {
+        return true;
+      }
+
+      if (nextProps.memo) {
+        const { memo } = this.props as any;
+        let isNeedUpdate = false;
+        for (let i = 0; i < memo.length; i++) {
+          if (nextProps.memo[i] !== memo[i]) {
+            isNeedUpdate = true;
+            break;
+          }
+        }
+
+        return isNeedUpdate;
+      }
+
       return false;
     };
   };

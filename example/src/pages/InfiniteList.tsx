@@ -10,15 +10,28 @@ export interface IRow {
 }
 
 const Row = ({ index, style }: IRow) => {
+  // tslint:disable-next-line
+  console.log('re-render-row:', index);
+
   return (
     <div style={style}>
-      <Consumer subscribe={s => [s.user.infinite[index]]}>{id => <div> Row {id}</div>}</Consumer>
+      <Consumer subscribe={s => [s.user.infinite[index]]}>
+        {id => {
+          // tslint:disable-next-line
+          console.log('re-render-row-div:', id);
+
+          return <div> Row {id}</div>;
+        }}
+      </Consumer>
       <button onClick={() => dispatchs.changeInfiniteIndex(index)}>change this {index}</button>
     </div>
   );
 };
 
 export const InfiniteList: React.FC = () => {
+  // tslint:disable-next-line
+  console.log('re-render-InfiniteList');
+
   return (
     <div style={{ background: '#fff' }}>
       <header>
