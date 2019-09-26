@@ -1,14 +1,17 @@
 {
   "name": "react-consumer",
-  "version": "1.3.2",
-  "main": "createStateManager.js",
-  "types": "createStateManager.d.ts",
+  "version": "1.3.3",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "umd"
+  ],
   "license": "MIT",
   "scripts": {
-    "lib": "tscu example/src/react-consumer --outDir es --outLib lib --copy 'package.json, README.md, .npmignore'"
+    "lib": "tscu example/src/react-consumer --outDir es --outLib lib"
   },
   "dependencies": {
-    "immer": "^3.1.3",
+    "immer": "^4.0.0",
     "querystring-number": "^1.0.1"
   },
   "devDependencies": {
