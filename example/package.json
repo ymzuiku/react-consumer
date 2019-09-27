@@ -37,11 +37,11 @@
     }
   },
   "lint-staged": {
-    "src/**/*.ts": [
+    "src/**/*.2ts": [
       "git add",
       "tslint"
     ],
-    "src/**/*.tsx": [
+    "src/**/*.2tsx": [
       "git add",
       "tslint"
     ]

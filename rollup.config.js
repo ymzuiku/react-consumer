@@ -5,22 +5,23 @@ module.exports = [
   {
     input: './example/src/react-consumer/index.ts',
     output: {
-      file: './umd/index.js',
+      file: './umd/react-consumer.umd.js',
       format: 'umd',
-      name: 'react-consumer',
+      name: 'ReactConsumer',
       sourcemap: true,
-    },
-    globals: {
-      react: 'React',
-      'react-dom': 'ReactDOM',
-      immer: 'produce',
+      globals: {
+        'querystring-number': 'queryString',
+        react: 'React',
+        'react-dom': 'ReactDOM',
+        immer: 'immer',
+      },
     },
     plugins: [
       rollupTypescript({
-        // tsconfigDefaults:{
+        // tsconfigDefaults: {
         //   compilerOptions: {
-        //     declaration:true,
-        //   }
+        //     declaration: true,
+        //   },
         // },
         useTsconfigDeclarationDir: false,
       }),

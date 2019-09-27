@@ -9,7 +9,7 @@ export interface IConsumerProps<S> {
 /**
  * 实例化 {store, Consumer}
  */
-export declare function createStateManager<S>(initalState: S): {
+export declare function createStateManager<S>(initalState: S, update: (state: S, fn: (s: S) => any) => any): {
     store: {
         listen: (fn: (state: S) => any) => () => void;
         getState: () => S;
@@ -36,16 +36,6 @@ export declare function createStateManager<S>(initalState: S): {
             refs: {
                 [key: string]: React.ReactInstance;
             };
-            componentDidMount?(): void;
-            componentDidCatch?(error: Error, errorInfo: React.ErrorInfo): void;
-            getSnapshotBeforeUpdate?(prevProps: Readonly<IConsumerProps<S>>, prevState: Readonly<{}>): any;
-            componentDidUpdate?(prevProps: Readonly<IConsumerProps<S>>, prevState: Readonly<{}>, snapshot?: any): void;
-            componentWillMount?(): void;
-            UNSAFE_componentWillMount?(): void;
-            componentWillReceiveProps?(nextProps: Readonly<IConsumerProps<S>>, nextContext: any): void;
-            UNSAFE_componentWillReceiveProps?(nextProps: Readonly<IConsumerProps<S>>, nextContext: any): void;
-            componentWillUpdate?(nextProps: Readonly<IConsumerProps<S>>, nextState: Readonly<{}>, nextContext: any): void;
-            UNSAFE_componentWillUpdate?(nextProps: Readonly<IConsumerProps<S>>, nextState: Readonly<{}>, nextContext: any): void;
         };
         contextType?: React.Context<any> | undefined;
     };

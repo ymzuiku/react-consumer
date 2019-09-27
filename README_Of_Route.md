@@ -4,15 +4,15 @@
 
 我们如果要确保整个项目 UI 都由一个状态管理，相当于整个项目 UI 都抽象成无副作用的函数，那么还需要讲路由也纳入状态管理中。
 
-我们可以使用 react-router, 使用 dispatch 为 history 封装一层，这样就可以很好的管理状态和路由。
+我们可以使用 react-router, 使用 action 为 history 封装一层，这样就可以很好的管理状态和路由。
 
 为了简化开发，react-consumer 的 `bindRouteManager` 对象实现了一个迷你的路由(gzip 只有 4kb)，可以无缝将路由也接入状态管理，旨在给出一个路由关联的思路, 具体可以查看 `lib/bindRouteManager.tsx` 文件。
 
 我们用刚刚的例子，修改实例化 store 的文件：
 
 ```tsx
-import { createStateManager } from 'react-consumer/createStateManager';
-import { bindRouteManager } from 'react-consumer/bindRouteManager';
+import ReactConsumer from 'react-consume';
+import produce from 'immer';
 
 const initState = {
   otherData: 'temp',
@@ -21,9 +21,17 @@ const initState = {
   paths: [],
 };
 
-const { Consumer, store } = createStateManager(initState);
+// 编写更新处理方法，这里推荐使用 immer 来使用不可变对象
+const updater = (state, event) => {
+  return produce(state, draft => {
+    event(draft);
+  });
+};
+
+const { Consumer, store } = ReactConsumer.createStateManager(initState, updater);
+
 // 使用Consumer，store 捆绑路由
-const { Route, routeMap } = bindRouteManager(store);
+const { Route, routeMap } = ReactConsumer.bindRouteManager(store);
 
 // 将 Route 导出，在页面中使用
 export { Consumer, store, Route, routeMap };
@@ -54,7 +62,7 @@ export default () => {
 };
 ```
 
-切换路由, 也仅仅是几个预设好的 dispatch:
+切换路由, 也仅仅是几个预设好的 action:
 
 ```js
 import { routeMap } from './store';

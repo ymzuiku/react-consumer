@@ -21,7 +21,8 @@ yarn add react-consumer
 ### 2. 实例化 store, Consumer
 
 ```js
-import { createStateManager } from 'react-consumer';
+import ReactConsumer from 'react-consumer';
+import produce from 'immer';
 
 // 一个多层级的对象示例，以验证immutable
 const initState = {
@@ -32,25 +33,28 @@ const initState = {
   },
 };
 
-const { store, Consumer } = createStateManager(initState);
+// 编写更新处理方法，这里推荐使用 immer 来使用不可变对象
+const updater = (state, event) => {
+  return produce(state, draft => {
+    event(draft);
+  });
+};
+
+const { store, Consumer } = ReactConsumer.createStateManager(initState, updater);
 
 export { store, Consumer };
 ```
 
 ## 状态管理的使用
 
-### 1. 编写 dispatch
+### 1. 编写 action
 
-整个项目的状态管理代码，只有 dispatch, 我们只需要要编写 dispatch 即可。
-
-action，reducer 都不需要编写，immutable 也不需要现示的编写，这一切都是自动的
-
-整个项目的状态都编写在一个个 dispatch 中
+整个项目的状态管理代码，只有 action, 我们只需要要编写 action 即可。
 
 ```js
 import { store } from './store';
 
-export function dispatchOfAddNum() {
+export function actionOfAddNum() {
   // 在任何异步结束之后，处理状态更新
   store.update(state => {
     // 此处执行区域是 immer 的更新函数，所以直接赋值即可，不需要返回整个 state
@@ -74,7 +78,7 @@ Consumer API
 
 ```js
 import React from 'react';
-import * as dispatchs from './dispatchs';
+import * as actions from './actions';
 import { Consumer } from './store';
 
 function Page() {
@@ -82,7 +86,7 @@ function Page() {
     <div className="app">
       <p>最简单的例子</p>
       <Consumer subscribe={state => [state.user.info.num]}>{num => <h2>{num}</h2>}</Consumer>
-      <button onClick={dispatchs.dispatchOfAddNum}>点击仅重绘number</button>
+      <button onClick={actions.actionOfAddNum}>点击仅重绘number</button>
     </div>
   );
 }
@@ -98,7 +102,7 @@ export default Page;
 
 我们如果要确保整个项目 UI 都由一个状态管理，相当于整个项目 UI 都抽象成无副作用的函数，那么还需要讲路由也纳入状态管理中。
 
-我们可以使用 react-router, 使用 dispatch 为 history 封装一层，这样就可以很好的管理状态和路由。
+我们可以使用 react-router, 使用 action 为 history 封装一层，这样就可以很好的管理状态和路由。
 
 `react-consumer` 内置了一个路由扩展模块，它帮我们无缝实现了以上功能，它非常接近 react-route，但是有些许不一样。具体可以查看：
 
@@ -106,16 +110,16 @@ export default Page;
 
 ## 单元测试
 
-单元测试我们只需要覆盖 dispatch 的测试即可, dispatch 仅是一个个函数，测试起来非常简单：
+单元测试我们只需要覆盖 actions 的测试即可, actions 仅是一个个函数，测试起来非常简单：
 
 ```js
-import { dispatchOfAddNum } from '../src/dispatchs';
+import { actionOfAddNum } from '../src/actions';
 import { store } from '../src/store';
 
 test('add card', async () => {
-  await dispatchOfAddNum(10);
+  await actionOfAddNum(10);
 
-  // 当函dispatch执行完成，我们检查一下 store 是否和我们预期的值一致即可
+  // 当函 action 执行完成，我们检查一下 store 是否和我们预期的值一致即可
   expect(store.getState().user.info.num).toBe(10);
 });
 ```
