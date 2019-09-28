@@ -8079,10 +8079,10 @@ querystring-es3@^0.2.0:
   resolved "https://registry.yarnpkg.com/querystring-es3/-/querystring-es3-0.2.1.tgz#9ec61f79049875707d69414596fd907a4d711e73"
   integrity sha1-nsYfeQSYdXB9aUFFlv2Qek1xHnM=
 
-querystring-number@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/querystring-number/-/querystring-number-1.0.1.tgz#14c694e51b04ebf0f3d35e84abc124d97aff34d2"
-  integrity sha512-SdTDmouFdVP4dOQkX3VSdUSb106/p+usor3WooinlqjArJN9YcGds6gq0mun8rHGpshHOBO6I6EjPcVfVFAcFg==
+querystring-number@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/querystring-number/-/querystring-number-1.0.6.tgz#5861f26aaf2dc378a52fd88c6a1688beb2b29b76"
+  integrity sha512-mqllvy5XJ+NMoF0OnIoEjklTtpBkjInIWPdpRO+emJeGezn1T6XBPCDBSrYPfKDxX80UUE4lF8O5IeVFPsqDTw==
 
 querystring@0.2.0:
   version "0.2.0"
