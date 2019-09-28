@@ -51,10 +51,10 @@ watcher.on('event', event => {
   }
   if (event.code === 'END') {
     watcher.close();
-    const files = fs.readdirSync(pwd('umd/react-consumer'));
-    files.forEach(file => {
-      fs.moveSync(pwd('umd/react-consumer', file), pwd('umd', file));
-    });
-    fs.removeSync(pwd('umd/react-consumer'));
+    // const files = fs.readdirSync(pwd('umd/react-consumer'));
+    // files.forEach(file => {
+    //   fs.moveSync(pwd('umd/react-consumer', file), pwd('umd', file));
+    // });
+    // fs.removeSync(pwd('umd/react-consumer'));
   }
 });
