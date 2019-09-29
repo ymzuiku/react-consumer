@@ -2,7 +2,7 @@ import { cssin } from 'cssin';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Route, routeMap } from './controller';
+import { Route, routeMap } from './store';
 import { App } from './pages/App';
 import { InfiniteList } from './pages/InfiniteList';
 import { User } from './pages/User';

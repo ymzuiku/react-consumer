@@ -1,9 +1,12 @@
+#!/usr/bin/env node
+
 const rollup = require('rollup');
 const rollupTypescript = require('rollup-plugin-typescript2');
 const { uglify } = require('rollup-plugin-uglify');
 const { resolve } = require('path');
 const pwd = (...args) => resolve(process.cwd(), ...args);
 const fs = require('fs-extra');
+const argv = process.argv.splice(2);
 
 function clearDir(dir) {
   if (fs.existsSync(dir)) {
@@ -12,6 +15,18 @@ function clearDir(dir) {
       fs.remove(`${dir}/${file}`);
     });
   }
+}
+function haveArgv(...args) {
+  let isHave = false;
+  args.forEach(str => {
+    argv.forEach(v => {
+      if (v === str) {
+        isHave = true;
+      }
+    });
+  });
+
+  return isHave;
 }
 
 clearDir(pwd('umd'));
@@ -50,7 +65,9 @@ watcher.on('event', event => {
     console.log(event);
   }
   if (event.code === 'END') {
-    watcher.close();
+    if (!haveArgv('--watch', '-w')) {
+      watcher.close();
+    }
 
     const files = fs.readdirSync(pwd('umd/react-consumer'));
     files.forEach(file => {

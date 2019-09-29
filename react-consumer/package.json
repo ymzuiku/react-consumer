@@ -1,6 +1,6 @@
 {
   "name": "react-consumer",
-  "version": "1.5.11",
+  "version": "1.6.0",
   "main": "umd/index.js",
   "types": "umd/index.d.ts",
   "files": [
@@ -8,7 +8,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "lib": "node rollup.config.js"
+    "lib": "node rollup.config.js",
+    "watch": "node rollup.config.js --watch"
   },
   "dependencies": {
     "querystring-number": "^1.0.6"

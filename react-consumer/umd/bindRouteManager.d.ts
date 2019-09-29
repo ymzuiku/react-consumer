@@ -1,3 +1,4 @@
+/// <reference types="react" />
 import { IRouteProps } from './createRoute';
 /**
  * 创建状态管理及路由控制

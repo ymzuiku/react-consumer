@@ -67,12 +67,14 @@ export function actionOfAddNum() {
 
 Consumer API
 
-| props         | 类型                                   | 描述                                                                   |
-| ------------- | -------------------------------------- | ---------------------------------------------------------------------- |
-| subscribe     | `(state) => any[]`                     | 返回一个数组对象, 只有当数组对象变更了, 才会更新组件                   |
-| beforeUnmount | `(...subscribeDatas) => void`          | 当组件将要销毁之前的回调                                               |
-| beforeUpdate  | `(...subscribeDatas) => void`          | 当组件将要更新之前的回调                                               |
-| children      | `(...subscribeDatas) => React.Element` | Consumer 的子组件是一个函数(renderProps), 函数参数是 memo 对象和 state |
+| props     | 类型                                   | 描述                                                                              |
+| --------- | -------------------------------------- | --------------------------------------------------------------------------------- |
+| subscribe | `(state) => any[]`                     | 返回一个数组对象, 只有当数组对象变更了, 才会更新组件                              |
+| memo      | `any[]`                                | 组件内部拦截了更新派发，若有非 subscribe 之外的上下文依赖更新，需要声明在 memo 中 |
+| onMount   | `(...subscribeDatas) => void`          | 当组件 onMount 时的回调                                                           |
+| onUnmount | `(...subscribeDatas) => void`          | 当组件将要销毁之前的回调                                                          |
+| onUpdate  | `(...subscribeDatas) => void`          | 当组件将要更新之前的回调                                                          |
+| children  | `(...subscribeDatas) => React.Element` | Consumer 的子组件是一个函数(renderProps), 函数参数是 memo 对象和 state            |
 
 示例：
 

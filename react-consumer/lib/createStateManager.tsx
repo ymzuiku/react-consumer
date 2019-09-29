@@ -2,10 +2,12 @@ import * as React from 'react';
 
 export interface IConsumerProps<S> {
   memo?: any[];
-  /* beforeUnmount */
-  beforeUnmount?(subscribeData: any[]): any;
-  /* beforeUpdate */
-  beforeUpdate?(subscribeData: any[]): any;
+  /* onBeforeMount */
+  onMount?(subscribeData: any[]): any;
+  /* onBeforeUnmount */
+  onUnmount?(subscribeData: any[]): any;
+  /* onBeforeUpdate */
+  onUpdate?(subscribeData: any[]): any;
   /* children */
   children(...subscribeData: any): any;
   /* 订阅需要更新的对象 在 props */
@@ -63,18 +65,24 @@ export function createStateManager<S>(initalState: S, update: (state: S, fn: (s:
       }
     }
 
+    public componentDidMount() {
+      if (this.props.onMount) {
+        this.props.onMount(this.lastData);
+      }
+    }
+
     public componentWillUnmount() {
       if (this.unListen) {
         this.unListen();
         this.unListen = null;
       }
-      if (this.props.beforeUnmount) {
-        this.props.beforeUnmount(this.lastData);
+      if (this.props.onUnmount) {
+        this.props.onUnmount(this.lastData);
       }
     }
 
     public handleListen = (s: S) => {
-      const { beforeUpdate, subscribe } = this.props;
+      const { onUpdate: beforeUpdate, subscribe } = this.props;
 
       const nowData = subscribe!(store.getState());
 

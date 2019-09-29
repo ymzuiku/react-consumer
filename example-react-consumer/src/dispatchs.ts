@@ -1,4 +1,4 @@
-import { store } from './controller';
+import { store } from './store';
 
 export const addNumber = () => {
   store.update(state => {

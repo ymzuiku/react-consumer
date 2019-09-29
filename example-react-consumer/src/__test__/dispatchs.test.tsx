@@ -1,5 +1,5 @@
-import { store } from '../controller';
 import * as dispatchs from '../dispatchs';
+import { store } from '../store';
 
 it('test add', () => {
   dispatchs.addNumber();

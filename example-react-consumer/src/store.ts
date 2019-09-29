@@ -1,7 +1,7 @@
 import produce from 'immer';
-import ReactConsumer from 'react-consumer';
+import { bindRouteManager, createStateManager } from 'react-consumer';
 
-const {createStateManager, bindRouteManager} = ReactConsumer;
+// const { createStateManager, bindRouteManager } = ReactConsumer;
 
 const infinite = [];
 for (let i = 0; i < 50000; i++) {
@@ -25,11 +25,11 @@ const initState = {
 
 export type IState = typeof initState;
 
-const updater = (s:IState, fn:any) => {
-  return produce(s, (draft:IState) => {
+const updater = (s: IState, fn: any) => {
+  return produce(s, (draft: IState) => {
     fn(draft);
   });
-}
+};
 
 const { Consumer, store } = createStateManager(initState, updater);
 const { Route, routeMap } = bindRouteManager(store);

@@ -39,9 +39,6 @@
     "arrow-return-shorthand": false,
     "variable-name": false,
     "file-name-casing": [false, "camel-case"],
-    "no-import-side-effect": [
-      false,
-      { "ignore-module": "(\\.html|\\.css|\\.scss|\\.less)$" }
-    ]
+    "no-import-side-effect": [false, { "ignore-module": "(\\.html|\\.css|\\.scss|\\.less)$" }]
   }
 }

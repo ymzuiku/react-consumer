@@ -1,7 +1,7 @@
-import { Consumer, Route, routeMap, store } from 'controller';
 import * as React from 'react';
 import { FixedSizeList as List } from 'react-window';
 
+import { Consumer, Route, routeMap, store } from '../store';
 import * as dispatchs from '../dispatchs';
 
 export interface IRow {
@@ -37,7 +37,9 @@ export const InfiniteList: React.FC = () => {
       <header>
         <h3>Infinite Page</h3>
         <Consumer subscribe={s => [s.paths]}>{paths => <h4>Route: {JSON.stringify(paths)} </h4>}</Consumer>
-        <Consumer subscribe={s => [s.status['/InfiniteList']]}>{param => <h4>Param: {JSON.stringify(param)} </h4>}</Consumer>
+        <Consumer subscribe={s => [s.status['/InfiniteList']]}>
+          {param => <h4>Param: {JSON.stringify(param)} </h4>}
+        </Consumer>
         <button onClick={() => routeMap.replace('/InfiniteList', { dog: Math.random() })}>Replace params</button>
         <button onClick={() => routeMap.pop()}>Go Back</button>
         <button onClick={() => routeMap.pop(0)}>Go Root Page</button>

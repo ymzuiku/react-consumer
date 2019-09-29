@@ -1,8 +1,9 @@
 import * as React from 'react';
 export interface IConsumerProps<S> {
     memo?: any[];
-    beforeUnmount?(subscribeData: any[]): any;
-    beforeUpdate?(subscribeData: any[]): any;
+    onMount?(subscribeData: any[]): any;
+    onUnmount?(subscribeData: any[]): any;
+    onUpdate?(subscribeData: any[]): any;
     children(...subscribeData: any): any;
     subscribe?(state: S): any[];
 }
@@ -23,6 +24,7 @@ export declare function createStateManager<S>(initalState: S, update: (state: S,
                 num: number;
             };
             unListen: any;
+            componentDidMount(): void;
             componentWillUnmount(): void;
             handleListen: (s: S) => void;
             render(): any;
