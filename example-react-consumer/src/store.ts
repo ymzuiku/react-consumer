@@ -1,4 +1,3 @@
-import produce from 'immer';
 import { bindRouteManager, createStateManager } from 'react-consumer';
 
 // const { createStateManager, bindRouteManager } = ReactConsumer;
@@ -24,12 +23,6 @@ const initState = {
 };
 
 export type IState = typeof initState;
-
-const updater = (s: IState, fn: any) => {
-  return produce(s, (draft: IState) => {
-    fn(draft);
-  });
-};
 
 const { Consumer, store } = createStateManager(initState);
 const { Route, routeMap } = bindRouteManager(store);
