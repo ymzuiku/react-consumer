@@ -102,7 +102,7 @@ export function createStateManager<S>(initalState: S, update: (state: S, fn: (s:
           beforeUpdate(nowData);
         }
         this.setState(({ num }: { num: number }) => ({
-          num: num > 900 ? 1 : num + 1,
+          num: num > 9990 ? 1 : num + 1,
         }));
       }
     };
