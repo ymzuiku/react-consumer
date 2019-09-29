@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { immerUpdater } from './immerUpdater';
 
 export interface IConsumerProps<S> {
   memo?: any[];
@@ -17,7 +18,7 @@ export interface IConsumerProps<S> {
 /**
  * 实例化 {store, Consumer}
  */
-export function createStateManager<S>(initalState: S, update: (state: S, fn: (s: S) => any) => any) {
+export function createStateManager<S>(initalState: S, updater: (state: S, fn: (s: S) => any) => any = immerUpdater) {
   // 创建一个  context, 用于后续配合 useContext 进行更新组件
   const subscribes = new Set();
 
@@ -41,7 +42,7 @@ export function createStateManager<S>(initalState: S, update: (state: S, fn: (s:
     subscribes,
     /* 更新全局状态，及发布视图更新 */
     update: (fn: (state: S) => void) => {
-      state = update(store.getState(), fn);
+      state = updater(store.getState(), fn);
 
       subscribes.forEach(value => {
         const sub = value as (state: S) => any;

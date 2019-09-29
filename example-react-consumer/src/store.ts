@@ -31,7 +31,7 @@ const updater = (s: IState, fn: any) => {
   });
 };
 
-const { Consumer, store } = createStateManager(initState, updater);
+const { Consumer, store } = createStateManager(initState);
 const { Route, routeMap } = bindRouteManager(store);
 
 export { Consumer, store, Route, routeMap };

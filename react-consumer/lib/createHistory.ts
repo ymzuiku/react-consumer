@@ -157,7 +157,11 @@ export const createHistory = (store: any): IHistory => {
       if (typeof window !== 'undefined') {
         const query = queryString.stringify(nextHistoric);
 
-        window.history.replaceState(null, `${space}${thePath}`, query === '' ? `${space}${thePath}` : `${space}${thePath}?${query}`);
+        window.history.replaceState(
+          null,
+          `${space}${thePath}`,
+          query === '' ? `${space}${thePath}` : `${space}${thePath}?${query}`
+        );
       }
     });
 
@@ -175,7 +179,11 @@ export const createHistory = (store: any): IHistory => {
       state.history[path] = nextHistoric;
       if (typeof window !== 'undefined' && !stopPush && !isKeepHistory) {
         const query = queryString.stringify(nextHistoric);
-        window.history.pushState(null, `${space}${path}`, query === '' ? `${space}${path}` : `${space}${path}?${query}`);
+        window.history.pushState(
+          null,
+          `${space}${path}`,
+          query === '' ? `${space}${path}` : `${space}${path}?${query}`
+        );
       }
     });
 

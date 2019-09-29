@@ -10,7 +10,7 @@ export interface IConsumerProps<S> {
 /**
  * 实例化 {store, Consumer}
  */
-export declare function createStateManager<S>(initalState: S, update: (state: S, fn: (s: S) => any) => any): {
+export declare function createStateManager<S>(initalState: S, updater?: (state: S, fn: (s: S) => any) => any): {
     store: {
         listen: (fn: (state: S) => any) => () => void;
         getState: () => S;
