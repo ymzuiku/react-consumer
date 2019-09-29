@@ -1,0 +1,33 @@
+{
+  "name": "react-consumer",
+  "version": "1.5.11",
+  "main": "umd/index.js",
+  "types": "umd/index.d.ts",
+  "files": [
+    "umd"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "lib": "node rollup.config.js"
+  },
+  "dependencies": {
+    "querystring-number": "^1.0.6"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.0.0",
+    "@types/jest": "24.0.13",
+    "@types/node": "8.10.39",
+    "@types/react": "16.8.19",
+    "@types/react-dom": "16.8.4",
+    "fs-extra": "^8.1.0",
+    "gulp-uglify": "^3.0.2",
+    "rollup": "^1.21.4",
+    "rollup-plugin-typescript2": "^0.24.2",
+    "rollup-plugin-uglify": "^6.0.3",
+    "typescript": "3.5.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ymzuiku/react-consumer"
+  }
+}
