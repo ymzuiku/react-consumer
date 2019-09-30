@@ -33,7 +33,7 @@ const initState = {
   },
 };
 
-// 编写更新处理方法，这里推荐使用 immer 来使用不可变对象
+// 可选编写更新处理方法，这里默认如下：使用 immer 来使用不可变对象
 const updater = (state, event) => {
   return produce(state, draft => {
     event(draft);
@@ -41,6 +41,9 @@ const updater = (state, event) => {
 };
 
 const { store, Consumer } = ReactConsumer.createStateManager(initState, updater);
+
+// 以上代码相当于：
+// const { store, Consumer } = ReactConsumer.createStateManager(initState);
 
 export { store, Consumer };
 ```

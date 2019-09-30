@@ -1,6 +1,6 @@
 {
   "name": "react-consumer",
-  "version": "1.6.0",
+  "version": "1.6.2",
   "main": "umd/index.js",
   "types": "umd/index.d.ts",
   "files": [
@@ -12,6 +12,7 @@
     "watch": "node rollup.config.js --watch"
   },
   "dependencies": {
+    "immer": "^4.0.0",
     "querystring-number": "^1.0.6"
   },
   "devDependencies": {
