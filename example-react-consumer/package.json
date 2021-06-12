@@ -12,7 +12,7 @@
   "dependencies": {
     "react-consumer": "^1.5.11",
     "cssin": "^1.2.8",
-    "immer": "^3.1.3",
+    "immer": "^8.0.1",
     "querystring-number": "^1.0.6"
   },
   "devDependencies": {

@@ -12,7 +12,7 @@
     "watch": "node rollup.config.js --watch"
   },
   "dependencies": {
-    "immer": "^4.0.0",
+    "immer": "^8.0.1",
     "querystring-number": "^1.0.6"
   },
   "devDependencies": {
